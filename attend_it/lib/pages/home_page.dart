@@ -13,23 +13,24 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Home'),
-      ),
+      // appBar: AppBar(
+      //   title: Text('Home'),
+      // ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            SizedBox(height: 30),
             Text(
               'Selamat Datang,',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Color(0xFF0047AB)),
             ),
             Text(
               'Kinata Dewa Ariandi',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold, color: Color(0xFF0047AB)),
             ),
-            SizedBox(height: 20),
+            SizedBox(height: 50),
             Expanded(
               child: GridView.count(
                 crossAxisCount: 2,
@@ -81,7 +82,7 @@ class _HomePageState extends State<HomePage> {
     return Container(
       decoration: BoxDecoration(
         color: color.withOpacity(0.2),
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(40),
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
