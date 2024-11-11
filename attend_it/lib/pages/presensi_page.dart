@@ -53,8 +53,29 @@ class _PresensiPageState extends State<PresensiPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Jadwal Kuliah"),
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(80.0),
+        child: AppBar(
+          automaticallyImplyLeading: false,
+          title: Container(
+            padding: EdgeInsets.only(top: 20.0, left: 8),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  'Kinata Dewa Ariandi',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white70),
+                ),
+                Text(
+                  '2241720087',
+                  style: TextStyle(fontSize: 10, color: Colors.white70),
+                ),
+              ],
+            ),
+          ),
+          backgroundColor: Color(0xFF0047AB),
+        ),
       ),
       body: ListView.builder(
         itemCount: schedules.length,

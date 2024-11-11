@@ -1,3 +1,4 @@
+import 'package:iconsax_plus/iconsax_plus.dart';
 import 'package:flutter/material.dart';
 
 class BottomNavBarWidget extends StatelessWidget {
@@ -31,12 +32,12 @@ class BottomNavBarWidget extends StatelessWidget {
         onTap(index); // Tetap panggil fungsi onTap eksternal
       },
       items: const [
-        BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-        BottomNavigationBarItem(icon: Icon(Icons.check), label: 'Presensi'),
-        BottomNavigationBarItem(icon: Icon(Icons.history), label: 'Histori'),
+        BottomNavigationBarItem(icon: Icon(IconsaxPlusLinear.home_2), label: 'Home'),
+        BottomNavigationBarItem(icon: Icon(IconsaxPlusLinear.tick_square), label: 'Presensi'),
+        BottomNavigationBarItem(icon: Icon(IconsaxPlusLinear.stickynote), label: 'Histori'),
         BottomNavigationBarItem(
-            icon: Icon(Icons.calendar_today), label: 'schedule'),
-        BottomNavigationBarItem(icon: Icon(Icons.person), label: 'profile'),
+            icon: Icon(IconsaxPlusLinear.calendar), label: 'schedule'),
+        BottomNavigationBarItem(icon: Icon(IconsaxPlusLinear.user_square), label: 'profile'),
       ],
     );
   }
