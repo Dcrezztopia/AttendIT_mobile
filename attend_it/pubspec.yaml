@@ -37,6 +37,12 @@ dependencies:
   # cupertino_icons: ^1.0.8
   iconsax_plus: ^1.0.0
 
+  # flutter_launcher_icons: latest
+  # flutter_icons:
+  #   android: true
+  #   ios: true
+  #   image_path: "assets/logo_jti.png" 
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -58,6 +64,8 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+  assets:
+    - assets/images/logo_jti.jpg
 
   # To add assets to your application, add an assets section, like this:
   # assets:
@@ -75,12 +83,12 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  # fonts:
-  #   - family: Schyler
-  #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
-  #       - asset: fonts/Schyler-Italic.ttf
-  #         style: italic
+  fonts:
+    - family: Poppins
+      fonts:
+        - asset: assets/font/poppins/Poppins-Regular.ttf
+        - asset: assets/font/poppins/Poppins-Bold.ttf
+          weight: 700
   #   - family: Trajan Pro
   #     fonts:
   #       - asset: fonts/TrajanPro.ttf
