@@ -21,7 +21,7 @@ class _PresensiPageState extends State<PresensiPage> {
     {
       "time": "14.30 - 18.00",
       "course": "Metodologi Penelitian",
-      "lecturer": "Ulia Rosiana",
+      "lecturer": "Ulla Rosiana",
       "room": "LKJ2_7T"
     },
     {
@@ -54,7 +54,7 @@ class _PresensiPageState extends State<PresensiPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(80.0),
+        preferredSize: const Size.fromHeight(75.0),
         child: AppBar(
           automaticallyImplyLeading: false,
           title: Container(
@@ -65,11 +65,15 @@ class _PresensiPageState extends State<PresensiPage> {
               children: [
                 Text(
                   'Kinata Dewa Ariandi',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white70),
+                  style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Color.fromARGB(255, 255, 255, 255)),
                 ),
                 Text(
                   '2241720087',
-                  style: TextStyle(fontSize: 10, color: Colors.white70),
+                  style: TextStyle(
+                      fontSize: 14, color: Color.fromARGB(199, 255, 255, 255)),
                 ),
               ],
             ),
@@ -88,29 +92,54 @@ class _PresensiPageState extends State<PresensiPage> {
                 borderRadius: BorderRadius.circular(16),
               ),
               elevation: 4,
+              color: const Color.fromARGB(255, 255, 255, 255),
+              shadowColor:
+                  const Color.fromARGB(255, 31, 30, 30).withOpacity(0.3),
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      schedule['time'] ?? '',
-                      style:
-                          const TextStyle(
-                          fontSize: 16, fontWeight: FontWeight.bold),
+                    Row(
+                      children: [
+                        const Icon(Icons.access_time, color: Color(0xFF0047AB)),
+                        const SizedBox(width: 6),
+                        Text(
+                          schedule['time'] ?? '',
+                          style: const TextStyle(
+                              fontSize: 14, fontWeight: FontWeight.bold),
+                        ),
+                      ],
                     ),
-                    const SizedBox(height: 4),
+                    const Divider(color: Colors.grey),
                     Text(
                       schedule['course'] ?? '',
-                      style:
-                          const TextStyle(
-                          fontSize: 18, fontWeight: FontWeight.w600),
+                      style: const TextStyle(
+                          fontSize: 16, fontWeight: FontWeight.w600),
                     ),
-                    const SizedBox(height: 4),
-                    Text(schedule['lecturer'] ?? ''),
-                    const SizedBox(height: 4),
-                    Text(schedule['room'] ?? '',
-                        style: const TextStyle(color: Colors.grey)),
+                    const SizedBox(height: 7),
+                    Row(
+                      children: [
+                        const Icon(Icons.person, color: Color(0xFF0047AB)),
+                        const SizedBox(width: 7),
+                        Text(
+                          schedule['lecturer'] ?? '',
+                          style: const TextStyle(fontSize: 13),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 7),
+                    Row(
+                      children: [
+                        const Icon(Icons.location_on, color: Color(0xFF0047AB)),
+                        const SizedBox(width: 7),
+                        Text(
+                          schedule['room'] ?? '',
+                          style:
+                              const TextStyle(color: Colors.grey, fontSize: 14),
+                        ),
+                      ],
+                    ),
                   ],
                 ),
               ),
