@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 // import './pages/home_page.dart'; // Import halaman utama
 
 class SplashScreen extends StatefulWidget {
+  const SplashScreen({super.key});
+
   @override
   _SplashScreenState createState() => _SplashScreenState();
 }
@@ -19,7 +21,7 @@ class _SplashScreenState extends State<SplashScreen> {
     _startAnimation(); // Start animation when splash screen loads
 
     // Navigate to the HomePage after 3 seconds
-    Future.delayed(Duration(seconds: 3), () {
+    Future.delayed(const Duration(seconds: 3), () {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
@@ -30,7 +32,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   // Start animation by setting new size and opacity values
   void _startAnimation() {
-    Future.delayed(Duration(milliseconds: 500), () {
+    Future.delayed(const Duration(milliseconds: 500), () {
       setState(() {
         _logoSize = 200; // Grow the logo size
         _logoOpacity = 1.0; // Fade in the logo
@@ -47,47 +49,48 @@ class _SplashScreenState extends State<SplashScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             AnimatedContainer(
-              duration: Duration(seconds: 2), // Animation duration
+              duration: const Duration(seconds: 2), // Animation duration
               curve: Curves.easeInOut, // Smooth animation curve
               height: _logoSize,
               width: _logoSize,
               child: AnimatedOpacity(
                 duration:
-                    Duration(seconds: 2), // Animation duration for opacity
+                    const Duration(
+                    seconds: 2), // Animation duration for opacity
                 opacity: _logoOpacity,
                 child: Image.asset(
                     'assets/images/logo_jti.jpg'), // Replace with your app logo
               ),
             ),
-            SizedBox(height: 20), // Space between logo and text
+            const SizedBox(height: 20), // Space between logo and text
             AnimatedOpacity(
-              duration: Duration(
+              duration: const Duration(
                   seconds: 2), // Same animation duration for smooth effect
               opacity: _logoOpacity,
-              child: Text(
-                'PRESENSI', // Your desired text
+              child: const Text(
+                'Attend IT', // Your desired text
                 style: TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 35,
                   fontWeight: FontWeight.bold,
-                  color: Colors.blue, // Customize text color as needed
+                  color: Color(0xFF0047AB), // Customize text color as needed
                 ),
               ),
             ),
-            SizedBox(height: 20), // Space between logo and text
-            AnimatedOpacity(
-              duration: Duration(
-                  seconds: 2), // Same animation duration for smooth effect
-              opacity: _logoOpacity,
-              child: Text(
-                'ONLINE', // Your desired text
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.grey, // Customize text color as needed
-                ),
-              ),
-            ),
+            // const SizedBox(height: 20), // Space between logo and text
+            // AnimatedOpacity(
+            //   duration: const Duration(
+            //       seconds: 2), // Same animation duration for smooth effect
+            //   opacity: _logoOpacity,
+            //   child: const Text(
+            //     'ONLINE', // Your desired text
+            //     style: TextStyle(
+            //       fontSize: 20,
+            //       fontWeight: FontWeight.bold,
+            //       color: Colors.grey, // Customize text color as needed
+            //     ),
+            //   ),
+            // ),
           ],
         ),
       ),
