@@ -23,7 +23,7 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SizedBox(height: 30),
+            const SizedBox(height: 50),
             const Text(
               'Selamat Datang,',
               style: TextStyle(
