@@ -46,14 +46,22 @@ class _HomePageState extends State<HomePage> {
                 crossAxisSpacing: 16,
                 children: [
                   _buildMenuItem(
-                    Image.asset('assets/images/jadwal.png'),
+                    SizedBox(
+                      width: 100,
+                      height: 90,
+                      child: Image.asset('assets/images/jadwalHome.png'),
+                    ),
                     'Lihat Jadwal',
                     Colors.white,
                     isGradient: true,
                     gradientColors: [Colors.green[800]!, Colors.green[300]!],
                   ),
                   _buildMenuItem(
-                    Image.asset('assets/images/presensiHome.png'),
+                    SizedBox(
+                      width: 100,
+                      height: 100,
+                      child: Image.asset('assets/images/presensiHome.png'),
+                    ),
                     'Presensi',
                     Colors.white,
                     isGradient: true,
@@ -63,14 +71,23 @@ class _HomePageState extends State<HomePage> {
                     ],
                   ),
                   _buildMenuItem(
-                    Image.asset('assets/images/history.png'),
+                    SizedBox(
+                      width: 90,
+                      height: 90,
+                      child: Image.asset('assets/images/historyHome.png'),
+                    ),
                     'History',
                     Colors.white,
                     isGradient: true,
                     gradientColors: [Colors.blue[800]!, Colors.blue[300]!],
                   ),
+
                   _buildMenuItem(
-                    Image.asset('assets/images/profile.png'),
+                    SizedBox(
+                      width: 100,
+                      height: 100,
+                      child: Image.asset('assets/images/profileHome.png'),
+                    ),
                     'Profile',
                     Colors.white,
                     isGradient: true,
