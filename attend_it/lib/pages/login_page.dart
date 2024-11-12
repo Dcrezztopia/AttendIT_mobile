@@ -1,7 +1,22 @@
 import 'package:attend_it/pages/home_page.dart';
 import 'package:flutter/material.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
+
+  @override
+  _LoginPageState createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  bool _isObscured = true;
+
+  void _togglePasswordView() {
+    setState(() {
+      _isObscured = !_isObscured;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -16,75 +31,87 @@ class LoginPage extends StatelessWidget {
                 // Logo
                 Image.asset(
                   'assets/images/logo_jti.jpg',
-                  height: 100,
+                  height: 200,
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
 
                 // Title
-                Text(
+                const Text(
                   'Presensi Online',
                   style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xFF1F3D7B),
+                    fontFamily: 'Poppins',
+                    fontSize: 25,
+                    fontWeight: FontWeight.w600,
+                    color: Color(0xFF0047AB),
                   ),
                 ),
-                Text(
+                const Text(
                   'JTI Polinema',
                   style: TextStyle(
+                    fontFamily: 'Poppins',
                     fontSize: 20,
-                    color: Color(0xFF1F3D7B),
+                    fontWeight: FontWeight.w600,
+                    color: Color(0xFF0047AB),
                   ),
                 ),
-                SizedBox(height: 30),
+                const SizedBox(height: 30),
 
                 // NIM Input
                 TextFormField(
                   decoration: InputDecoration(
-                    labelText: 'NIM',
-                    labelStyle: TextStyle(color: Colors.grey),
+                    hintText: 'NIM',
+                    hintStyle: TextStyle(color: Colors.grey.shade400),
                     filled: true,
-                    fillColor: Color(0xFFF3F4F6),
+                    fillColor: const Color(0xFFF3F4F6),
+                    floatingLabelBehavior: FloatingLabelBehavior.never,
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
                       borderSide: BorderSide.none,
                     ),
                   ),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
 
-                // Password Input
+                // Password Input with Toggle Visibility
                 TextFormField(
-                  obscureText: true,
+                  obscureText: _isObscured,
                   decoration: InputDecoration(
-                    labelText: 'Password',
-                    labelStyle: TextStyle(color: Colors.grey),
+                    hintText: 'Password',
+                    hintStyle: TextStyle(color: Colors.grey.shade400),
                     filled: true,
-                    fillColor: Color(0xFFF3F4F6),
+                    fillColor: const Color(0xFFF3F4F6),
+                    floatingLabelBehavior: FloatingLabelBehavior.never,
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
                       borderSide: BorderSide.none,
                     ),
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        _isObscured ? Icons.visibility_off : Icons.visibility,
+                        color: Colors.grey,
+                      ),
+                      onPressed: _togglePasswordView,
+                    ),
                   ),
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
 
                 // Remember Me Checkbox
                 Row(
                   children: [
                     Checkbox(
-                      value: false, // Set sesuai kebutuhan
+                      value: false,
                       onChanged: (bool? value) {
                         // Handle checkbox change
                       },
                     ),
-                    Text(
+                    const Text(
                       'Ingat Password',
                       style: TextStyle(color: Colors.grey),
                     ),
                   ],
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
 
                 // Login Button and Fingerprint Icon
                 Row(
@@ -93,35 +120,34 @@ class LoginPage extends StatelessWidget {
                     // Login Button
                     ElevatedButton(
                       onPressed: () {
-                        // Navigasi ke HomePage setelah login
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                              builder: (context) =>
-                                  HomePage()), // Ganti HomePage dengan halaman tujuan
+                            builder: (context) => HomePage(),
+                          ),
                         );
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Color(0xFFF2B400),
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 100, vertical: 15),
+                        backgroundColor: const Color(0xFFF2B400),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 100, vertical: 15),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(30),
                         ),
                       ),
-                      child: Text(
+                      child: const Text(
                         'LOGIN',
                         style: TextStyle(
                             color: Colors.white, fontWeight: FontWeight.bold),
                       ),
                     ),
-                    SizedBox(width: 20),
+                    const SizedBox(width: 20),
 
                     // Fingerprint Icon
                     CircleAvatar(
-                      backgroundColor: Color(0xFFF2B400).withOpacity(0.2),
+                      backgroundColor: const Color(0xFFF2B400).withOpacity(0.2),
                       radius: 25,
-                      child: Icon(
+                      child: const Icon(
                         Icons.fingerprint,
                         size: 30,
                         color: Color(0xFFF2B400),

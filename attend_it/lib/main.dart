@@ -9,6 +9,8 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -22,7 +24,7 @@ class MyApp extends StatelessWidget {
         '/': (context) => SplashScreen(),
         '/login': (context) => LoginPage(),
         '/home': (context) => HomePage(),
-        '/presensi': (context) => PresensiPage(),
+        '/presensi': (context) => const PresensiPage(),
         // '/profile': (context) => ProfilePage(),
       },
     );

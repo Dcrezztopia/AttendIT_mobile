@@ -54,12 +54,12 @@ class _PresensiPageState extends State<PresensiPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(80.0),
+        preferredSize: const Size.fromHeight(80.0),
         child: AppBar(
           automaticallyImplyLeading: false,
           title: Container(
-            padding: EdgeInsets.only(top: 20.0, left: 8),
-            child: Column(
+            padding: const EdgeInsets.only(top: 20.0, left: 8),
+            child: const Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -74,7 +74,7 @@ class _PresensiPageState extends State<PresensiPage> {
               ],
             ),
           ),
-          backgroundColor: Color(0xFF0047AB),
+          backgroundColor: const Color(0xFF0047AB),
         ),
       ),
       body: ListView.builder(
@@ -96,19 +96,21 @@ class _PresensiPageState extends State<PresensiPage> {
                     Text(
                       schedule['time'] ?? '',
                       style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                          const TextStyle(
+                          fontSize: 16, fontWeight: FontWeight.bold),
                     ),
-                    SizedBox(height: 4),
+                    const SizedBox(height: 4),
                     Text(
                       schedule['course'] ?? '',
                       style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                          const TextStyle(
+                          fontSize: 18, fontWeight: FontWeight.w600),
                     ),
-                    SizedBox(height: 4),
+                    const SizedBox(height: 4),
                     Text(schedule['lecturer'] ?? ''),
-                    SizedBox(height: 4),
+                    const SizedBox(height: 4),
                     Text(schedule['room'] ?? '',
-                        style: TextStyle(color: Colors.grey)),
+                        style: const TextStyle(color: Colors.grey)),
                   ],
                 ),
               ),
