@@ -23,77 +23,99 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SizedBox(height: 30),
+            /// USER SECTION
+            const SizedBox(height: 60),
             const Text(
               'Selamat Datang,',
               style: TextStyle(
-                  fontSize: 30,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF0047AB)),
+                fontFamily: 'Poppins',
+                fontSize: 30,
+                fontWeight: FontWeight.bold,
+                color: Color(0xFF0047AB)
+              ),
             ),
             const Text(
               'Kinata Dewa Ariandi',
               style: TextStyle(
-                  fontSize: 25,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF0047AB)),
+                fontFamily: 'Poppins',
+                fontSize: 25,
+                fontWeight: FontWeight.bold,
+                color: Color(0xFF0047AB)
+              ),
             ),
-            const SizedBox(height: 50),
+            const SizedBox(height: 60),
+            /// FAST MENU IN HOMEPAGE
             Expanded(
-              child: GridView.count(
-                crossAxisCount: 2,
-                mainAxisSpacing: 16,
-                crossAxisSpacing: 16,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _buildMenuItem(
-                    SizedBox(
-                      width: 100,
-                      height: 90,
-                      child: Image.asset('assets/images/jadwalHome.png'),
+                  // Kolom pertama: Lihat Jadwal dan History
+                  Expanded(
+                    child: Column(
+                      children: [
+                        _buildMenuItem(
+                          SizedBox(
+                            width: 100,
+                            height: 90,
+                            child: Image.asset('assets/images/jadwalHome.png'),
+                          ),
+                          'Lihat Jadwal',
+                          Colors.white,
+                          isGradient: true,
+                          gradientColors: [Colors.green[800]!, Colors.green[300]!],
+                        ),
+                        const SizedBox(height: 32), // Jarak antar item
+                        _buildMenuItem(
+                          SizedBox(
+                            width: 90,
+                            height: 90,
+                            child: Image.asset('assets/images/historyHome.png'),
+                          ),
+                          'History',
+                          Colors.white,
+                          isGradient: true,
+                          gradientColors: [Colors.blue[800]!, Colors.blue[300]!],
+                        ),
+                      ],
                     ),
-                    'Lihat Jadwal',
-                    Colors.white,
-                    isGradient: true,
-                    gradientColors: [Colors.green[800]!, Colors.green[300]!],
                   ),
-                  _buildMenuItem(
-                    SizedBox(
-                      width: 100,
-                      height: 100,
-                      child: Image.asset('assets/images/presensiHome.png'),
-                    ),
-                    'Presensi',
-                    Colors.white,
-                    isGradient: true,
-                    gradientColors: [
-                      Color.fromARGB(255, 155, 41, 241),
-                      Color(0xFFDBB0FD)
-                    ],
-                  ),
-                  _buildMenuItem(
-                    SizedBox(
-                      width: 90,
-                      height: 90,
-                      child: Image.asset('assets/images/historyHome.png'),
-                    ),
-                    'History',
-                    Colors.white,
-                    isGradient: true,
-                    gradientColors: [Colors.blue[800]!, Colors.blue[300]!],
-                  ),
+                  const SizedBox(width: 16), // Jarak antar kolom
 
-                  _buildMenuItem(
-                    SizedBox(
-                      width: 100,
-                      height: 100,
-                      child: Image.asset('assets/images/profileHome.png'),
+                  // Kolom kedua: Presensi dan Profile
+                  Expanded(
+                    child: Column(
+                      children: [
+                        SizedBox(height: 90,),
+                        _buildMenuItem(
+                          SizedBox(
+                            width: 100,
+                            height: 100,
+                            child: Image.asset('assets/images/presensiHome.png'),
+                          ),
+                          'Presensi',
+                          Colors.white,
+                          isGradient: true,
+                          gradientColors: [
+                            Color(0xFF9B29F1),
+                            Color(0xFFDBB0FD),
+                          ],
+                        ),
+                        const SizedBox(height: 32), // Jarak antar item
+                        _buildMenuItem(
+                          SizedBox(
+                            width: 100,
+                            height: 100,
+                            child: Image.asset('assets/images/profileHome.png'),
+                          ),
+                          'Profile',
+                          Colors.white,
+                          isGradient: true,
+                          gradientColors: [Colors.orange[800]!, Colors.orange[300]!],
+                        ),
+                      ],
                     ),
-                    'Profile',
-                    Colors.white,
-                    isGradient: true,
-                    gradientColors: [Colors.orange[800]!, Colors.orange[300]!],
                   ),
-
                 ],
               ),
             ),
@@ -108,25 +130,6 @@ class _HomePageState extends State<HomePage> {
           });
         },
       ),
-      //   bottomNavigationBar: BottomNavigationBar(
-      //     items: [
-      //       BottomNavigationBarItem(
-      //         icon: Icon(Icons.home),
-      //         label: 'Home',
-      //       ),
-      //       BottomNavigationBarItem(
-      //         icon: Icon(Icons.history),
-      //         label: 'History',
-      //       ),
-      //       BottomNavigationBarItem(
-      //         icon: Icon(Icons.person),
-      //         label: 'Profile',
-      //       ),
-      //     ],
-      //     selectedItemColor: Colors.blue,
-      //     unselectedItemColor: Colors.grey,
-      //     currentIndex: 0,
-      //   ),
     );
   }
 
@@ -143,31 +146,36 @@ class _HomePageState extends State<HomePage> {
 
   Widget _buildMenuItem(Widget icon, String title, Color color,
       {bool isGradient = false, List<Color>? gradientColors}) {
-    return Container(
-      decoration: isGradient && gradientColors != null
-          ? BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: gradientColors,
-              ),
-              borderRadius: BorderRadius.circular(40),
-            )
-          : BoxDecoration(
-              color: color.withOpacity(0.2),
-              borderRadius: BorderRadius.circular(40),
+      return SizedBox(
+        width: double.infinity,
+        height: 200, // Atur tinggi sesuai keinginan
+        child: Container(
+          decoration: isGradient && gradientColors != null
+              ? BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: gradientColors,
+                  ),
+                  borderRadius: BorderRadius.circular(40),
+                )
+              : BoxDecoration(
+                  color: color.withOpacity(0.2),
+                  borderRadius: BorderRadius.circular(40),
+                ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              icon, // Gambar atau ikon yang digunakan
+              const SizedBox(height: 8),
+              Text(
+                title,
+                style: const TextStyle(
+                  fontFamily: 'Poppins',
+                    fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
             ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          icon, // Gambar atau ikon yang digunakan
-          const SizedBox(height: 8),
-          Text(
-            title,
-            style: const TextStyle(
-                fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
