@@ -1,5 +1,6 @@
 // pages/home_page.dart
 import 'package:attend_it/pages/bottom_nav_widget.dart';
+import 'package:attend_it/pages/presensi_page.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -20,33 +21,33 @@ class _HomePageState extends State<HomePage> {
       // ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            /// USER SECTION
-            const SizedBox(height: 60),
-            const Text(
-              'Selamat Datang,',
-              style: TextStyle(
-                fontFamily: 'Poppins',
-                fontSize: 30,
-                fontWeight: FontWeight.bold,
-                color: Color(0xFF0047AB)
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              /// USER SECTION
+              const SizedBox(height: 60),
+              const Text(
+                'Selamat Datang,',
+                style: TextStyle(
+                  fontFamily: 'Poppins',
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF0047AB)
+                ),
               ),
-            ),
-            const Text(
-              'Kinata Dewa Ariandi',
-              style: TextStyle(
-                fontFamily: 'Poppins',
-                fontSize: 25,
-                fontWeight: FontWeight.bold,
-                color: Color(0xFF0047AB)
+              const Text(
+                'Kinata Dewa Ariandi',
+                style: TextStyle(
+                  fontFamily: 'Poppins',
+                  fontSize: 25,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF0047AB)
+                ),
               ),
-            ),
-            const SizedBox(height: 60),
-            /// FAST MENU IN HOMEPAGE
-            Expanded(
-              child: Row(
+              const SizedBox(height: 60),
+              /// FAST MENU IN HOMEPAGE
+              Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -81,7 +82,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                   const SizedBox(width: 16), // Jarak antar kolom
-
+              
                   // Kolom kedua: Presensi dan Profile
                   Expanded(
                     child: Column(
@@ -100,6 +101,12 @@ class _HomePageState extends State<HomePage> {
                             Color(0xFF9B29F1),
                             Color(0xFFDBB0FD),
                           ],
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => PresensiPage()),
+                            );
+                          },
                         ),
                         const SizedBox(height: 32), // Jarak antar item
                         _buildMenuItem(
@@ -118,8 +125,8 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ],
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
       bottomNavigationBar: BottomNavBarWidget(
@@ -144,9 +151,16 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _buildMenuItem(Widget icon, String title, Color color,
-      {bool isGradient = false, List<Color>? gradientColors}) {
-      return SizedBox(
+  Widget _buildMenuItem(
+    Widget icon, 
+    String title, 
+    Color color, 
+    {bool isGradient = false, 
+    List<Color>? gradientColors, 
+    VoidCallback? onTap,}) {
+    return GestureDetector(
+      onTap: onTap,
+      child: SizedBox(
         width: double.infinity,
         height: 200, // Atur tinggi sesuai keinginan
         child: Container(
@@ -172,12 +186,15 @@ class _HomePageState extends State<HomePage> {
                 title,
                 style: const TextStyle(
                   fontFamily: 'Poppins',
-                    fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
-            ),
-          ],
+                  fontSize: 18, 
+                  fontWeight: FontWeight.bold, 
+                  color: Colors.white
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
-
 }
