@@ -1,5 +1,6 @@
 // pages/home_page.dart
-import 'package:attend_it/pages/bottom_nav_widget.dart';
+import 'package:attend_it/pages/profile_page.dart';
+import 'package:attend_it/widgets/bottom_nav_widget.dart';
 import 'package:attend_it/pages/presensi_page.dart';
 import 'package:flutter/material.dart';
 
@@ -119,6 +120,12 @@ class _HomePageState extends State<HomePage> {
                           Colors.white,
                           isGradient: true,
                           gradientColors: [Colors.orange[800]!, Colors.orange[300]!],
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => ProfilePage()),
+                            );
+                          },
                         ),
                       ],
                     ),

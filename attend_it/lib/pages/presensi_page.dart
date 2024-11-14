@@ -1,4 +1,4 @@
-import 'package:attend_it/pages/bottom_nav_widget.dart';
+import 'package:attend_it/widgets/bottom_nav_widget.dart';
 import 'package:flutter/material.dart';
 
 class PresensiPage extends StatefulWidget {

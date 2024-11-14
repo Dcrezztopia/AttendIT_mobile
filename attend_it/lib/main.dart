@@ -1,4 +1,5 @@
 import 'package:attend_it/pages/login_page.dart';
+import 'package:attend_it/pages/profile_page.dart';
 import 'package:attend_it/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'pages/home_page.dart'; // Import halaman HomePage dari folder pages
@@ -25,7 +26,7 @@ class MyApp extends StatelessWidget {
         '/login': (context) => LoginPage(),
         '/home': (context) => HomePage(),
         '/presensi': (context) => const PresensiPage(),
-        // '/profile': (context) => ProfilePage(),
+        '/profile': (context) => const ProfilePage(),
       },
     );
   }
