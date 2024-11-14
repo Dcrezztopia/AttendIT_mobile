@@ -101,7 +101,7 @@ class _ProfilePageState extends State<ProfilePage> {
             style: TextStyle(fontSize: 16, color: Colors.white),
           ),
           const Text(
-            'Jurusan Teknologi Informasi\nPoliteknik Negeri Malang',
+            '\nJurusan Teknologi Informasi\nPoliteknik Negeri Malang',
             textAlign: TextAlign.center,
             style: TextStyle(fontSize: 12, color: Colors.white70),
           ),

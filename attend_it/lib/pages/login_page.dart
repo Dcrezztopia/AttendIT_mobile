@@ -130,9 +130,9 @@ class _LoginPageState extends State<LoginPage> {
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFFF2B400),
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 100, vertical: 15),
+                            horizontal: 100, vertical: 25),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30),
+                          borderRadius: BorderRadius.circular(20),
                         ),
                       ),
                       child: const Text(
@@ -141,7 +141,7 @@ class _LoginPageState extends State<LoginPage> {
                             color: Colors.white, fontWeight: FontWeight.bold),
                       ),
                     ),
-                    const SizedBox(width: 20),
+                    const SizedBox(width: 5),
 
                     // Fingerprint Icon
                     CircleAvatar(
@@ -149,7 +149,7 @@ class _LoginPageState extends State<LoginPage> {
                       radius: 25,
                       child: const Icon(
                         Icons.fingerprint,
-                        size: 30,
+                        size: 40,
                         color: Color(0xFFF2B400),
                       ),
                     ),
