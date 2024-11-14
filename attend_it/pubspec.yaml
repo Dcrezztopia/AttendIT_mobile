@@ -71,6 +71,7 @@ flutter:
     - assets/images/profileHome.png
     - assets/images/historyHome.png
     - assets/images/jadwalHome.png
+    - assets/images/ktm.jpeg
 
   # To add assets to your application, add an assets section, like this:
   # assets:
