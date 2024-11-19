@@ -1,5 +1,7 @@
+import 'package:attend_it/pages/history_page.dart';
 import 'package:attend_it/pages/login_page.dart';
 import 'package:attend_it/pages/profile_page.dart';
+import 'package:attend_it/pages/schedule_page.dart';
 import 'package:attend_it/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'pages/home_page.dart'; // Import halaman HomePage dari folder pages
@@ -22,10 +24,12 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/',
       routes: {
-        '/': (context) => SplashScreen(),
-        '/login': (context) => LoginPage(),
-        '/home': (context) => HomePage(),
+        '/': (context) => const SplashScreen(),
+        '/login': (context) => const LoginPage(),
+        '/home': (context) => const HomePage(),
         '/presensi': (context) => const PresensiPage(),
+        '/histori': (context) => const HistoryPage(),
+        '/schedule' : (context) => const SchedulePage(),
         '/profile': (context) => const ProfilePage(),
       },
     );

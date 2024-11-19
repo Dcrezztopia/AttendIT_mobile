@@ -26,6 +26,14 @@ class BottomNavBarWidget extends StatelessWidget {
           Navigator.pushNamed(
               context, '/presensi'); // Navigasi ke halaman History
         }
+        if (index == 2) {
+          Navigator.pushNamed(
+              context, '/histori'); // Navigasi ke halaman History
+        }
+        if (index == 3) {
+          Navigator.pushNamed(
+              context, '/schedule'); // Navigasi ke halaman History
+        }
         if (index == 4) {
           Navigator.pushNamed(
               context, '/profile'); // Navigasi ke halaman History

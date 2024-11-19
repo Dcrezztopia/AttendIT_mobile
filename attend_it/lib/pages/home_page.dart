@@ -1,5 +1,7 @@
 // pages/home_page.dart
+import 'package:attend_it/pages/history_page.dart';
 import 'package:attend_it/pages/profile_page.dart';
+import 'package:attend_it/pages/schedule_page.dart';
 import 'package:attend_it/widgets/bottom_nav_widget.dart';
 import 'package:attend_it/pages/presensi_page.dart';
 import 'package:flutter/material.dart';
@@ -66,6 +68,12 @@ class _HomePageState extends State<HomePage> {
                           Colors.white,
                           isGradient: true,
                           gradientColors: [Colors.green[800]!, Colors.green[300]!],
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => SchedulePage()),
+                            );
+                          },
                         ),
                         const SizedBox(height: 32), // Jarak antar item
                         _buildMenuItem(
@@ -78,6 +86,12 @@ class _HomePageState extends State<HomePage> {
                           Colors.white,
                           isGradient: true,
                           gradientColors: [Colors.blue[800]!, Colors.blue[300]!],
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => HistoryPage()),
+                            );
+                          },
                         ),
                       ],
                     ),

@@ -1,3 +1,4 @@
+import 'package:attend_it/widgets/appbar_user_widget.dart';
 import 'package:attend_it/widgets/bottom_nav_widget.dart';
 import 'package:flutter/material.dart';
 
@@ -10,6 +11,10 @@ class PresensiPage extends StatefulWidget {
 
 class _PresensiPageState extends State<PresensiPage> {
   int _currentIndex = 1; // Index for Bottom Navigation Bar
+
+  // Contoh data pengguna yang login
+  final String userName = "Kinata Dewa Ariandi"; // Ganti dengan data user login
+  final String userId = "2241720087"; // Ganti dengan data user login
 
   final List<Map<String, String>> schedules = [
     {
@@ -53,33 +58,9 @@ class _PresensiPageState extends State<PresensiPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(75.0),
-        child: AppBar(
-          automaticallyImplyLeading: false,
-          title: Container(
-            padding: const EdgeInsets.only(top: 20.0, left: 8),
-            child: const Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  'Kinata Dewa Ariandi',
-                  style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Color.fromARGB(255, 255, 255, 255)),
-                ),
-                Text(
-                  '2241720087',
-                  style: TextStyle(
-                      fontSize: 14, color: Color.fromARGB(199, 255, 255, 255)),
-                ),
-              ],
-            ),
-          ),
-          backgroundColor: const Color(0xFF0047AB),
-        ),
+      appBar: AppbarUserWidget(
+        userName: userName, 
+        userId: userId
       ),
       body: ListView.builder(
         itemCount: schedules.length,
