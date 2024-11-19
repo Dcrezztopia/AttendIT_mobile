@@ -46,7 +46,7 @@ class _SchedulePageState extends State<SchedulePage> {
           FeatureWidget(
             title: "LMS",
             gradientColors: [
-              const Color.fromARGB(255, 237, 172, 80),
+              const Color.fromARGB(255, 255, 193, 78),
               const Color.fromARGB(255, 255, 255, 255)
             ],
             url: "https://lmsslc.polinema.ac.id/",
