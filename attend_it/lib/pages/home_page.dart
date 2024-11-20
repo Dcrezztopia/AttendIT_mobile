@@ -71,7 +71,8 @@ class _HomePageState extends State<HomePage> {
                           onTap: () {
                             Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) => SchedulePage()),
+                              MaterialPageRoute(
+                                  builder: (context) => const SchedulePage()),
                             );
                           },
                         ),
@@ -89,7 +90,8 @@ class _HomePageState extends State<HomePage> {
                           onTap: () {
                             Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) => HistoryPage()),
+                              MaterialPageRoute(
+                                  builder: (context) => const HistoryPage()),
                             );
                           },
                         ),
@@ -102,7 +104,9 @@ class _HomePageState extends State<HomePage> {
                   Expanded(
                     child: Column(
                       children: [
-                        SizedBox(height: 90,),
+                        const SizedBox(
+                          height: 90,
+                        ),
                         _buildMenuItem(
                           SizedBox(
                             width: 100,
@@ -113,13 +117,14 @@ class _HomePageState extends State<HomePage> {
                           Colors.white,
                           isGradient: true,
                           gradientColors: [
-                            Color(0xFF9B29F1),
-                            Color(0xFFDBB0FD),
+                            const Color(0xFF9B29F1),
+                            const Color(0xFFDBB0FD),
                           ],
                           onTap: () {
                             Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) => PresensiPage()),
+                              MaterialPageRoute(
+                                  builder: (context) => const PresensiPage()),
                             );
                           },
                         ),
@@ -137,7 +142,8 @@ class _HomePageState extends State<HomePage> {
                           onTap: () {
                             Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) => ProfilePage()),
+                              MaterialPageRoute(
+                                  builder: (context) => const ProfilePage()),
                             );
                           },
                         ),
