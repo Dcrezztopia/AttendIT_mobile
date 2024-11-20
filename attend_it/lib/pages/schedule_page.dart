@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart'; // Pastikan sudah mengimpor url_launcher
-
+import 'package:url_launcher/url_launcher.dart';
 import '../widgets/appbar_user_widget.dart';
 import '../widgets/bottom_nav_widget.dart';
 
@@ -38,7 +37,7 @@ class _SchedulePageState extends State<SchedulePage> {
             title: "Siakad",
             gradientColors: [
               const Color(0XFFFFA4ED),
-              const Color.fromARGB(255, 255, 255, 255)
+              const Color.fromARGB(255, 255, 255, 255),
             ],
             url: "https://siakad.polinema.ac.id/login/",
             imagePath: 'assets/images/siakad.png',
@@ -46,8 +45,8 @@ class _SchedulePageState extends State<SchedulePage> {
           FeatureWidget(
             title: "LMS",
             gradientColors: [
-              const Color.fromARGB(255, 255, 193, 78),
-              const Color.fromARGB(255, 255, 255, 255)
+              const Color.fromARGB(255, 237, 172, 80),
+              const Color.fromARGB(255, 255, 255, 255),
             ],
             url: "https://lmsslc.polinema.ac.id/",
             imagePath: 'assets/images/lms.png',
@@ -56,7 +55,7 @@ class _SchedulePageState extends State<SchedulePage> {
             title: "Website JTI",
             gradientColors: [
               const Color(0XFFFF3F3B),
-              const Color.fromARGB(255, 255, 255, 255)
+              const Color.fromARGB(255, 255, 255, 255),
             ],
             url: "https://jti.polinema.ac.id/",
             imagePath: 'assets/images/web.png',
@@ -103,21 +102,20 @@ class FeatureWidget extends StatelessWidget {
             content: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                // Gantilah URL embed dengan URL gambar langsung
-                Image.network(
-                  'https://media.giphy.com/media/bGgsc5mWoryfgKBx1u/giphy.gif', // URL gambar langsung dari Giphy
+                Image.asset(
+                  'assets/images/giphy.gif',
                   height: 200,
                   width: 200,
                   fit: BoxFit.cover,
                 ),
-                Text(
+                const Text(
                   'Open Link?',
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                Text(
+                const Text(
                   'Do you want to open this link?',
                   style: TextStyle(
                     fontFamily: 'Poppins',
@@ -134,17 +132,15 @@ class FeatureWidget extends StatelessWidget {
                   } else {
                     throw 'Could not launch $url';
                   }
-                  Navigator.of(context)
-                      .pop(); // Menutup pop-up setelah membuka URL
+                  Navigator.of(context).pop();
                 },
-                child: Text('OK'),
+                child: const Text('OK'),
               ),
               TextButton(
                 onPressed: () {
-                  Navigator.of(context)
-                      .pop(); // Menutup pop-up jika membatalkan
+                  Navigator.of(context).pop();
                 },
-                child: Text('Cancel'),
+                child: const Text('Cancel'),
               ),
             ],
           );
@@ -156,26 +152,23 @@ class FeatureWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: url != null
-          ? () => _launchURL(context)
-          : null, // Buka URL jika ada URL
+      onTap: url != null ? () => _launchURL(context) : null,
       child: Container(
-        width: 330,
+        width: 380,
         height: 100,
         margin: const EdgeInsets.symmetric(vertical: 16),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(15),
           gradient: LinearGradient(
             colors: gradientColors,
-            begin: Alignment.topCenter, // Titik awal gradasi
-            end: Alignment.centerRight, // Titik akhir gradasi
+            begin: Alignment.topCenter,
+            end: Alignment.centerRight,
           ),
           boxShadow: [
             BoxShadow(
-              color: Colors.black
-                  .withOpacity(0.2), // Warna bayangan dengan transparansi
-              blurRadius: 8, // Seberapa lembut bayangan
-              offset: const Offset(4, 4), // Posisi bayangan (x, y)
+              color: Colors.black.withOpacity(0.2),
+              blurRadius: 8,
+              offset: const Offset(4, 4),
             ),
           ],
         ),
@@ -193,8 +186,7 @@ class FeatureWidget extends StatelessWidget {
                 ),
               ),
             ),
-            if (imagePath !=
-                null) // Menambahkan gambar jika imagePath tidak null
+            if (imagePath != null)
               Positioned(
                 top: 20,
                 right: 10,
