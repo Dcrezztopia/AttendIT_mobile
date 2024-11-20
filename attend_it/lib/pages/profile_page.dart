@@ -22,8 +22,8 @@ class _ProfilePageState extends State<ProfilePage> {
             _buildHeader(),
             const SizedBox(height: 20),
             _buildStudentData(),
-            Center(
-              child: Container(
+            const Center(
+              child: SizedBox(
                 width: 330, // Atur lebar Divider sesuai keinginan
                 child: Divider(
                   color: Color(0xFF0047AB), // Warna biru kustom
@@ -32,8 +32,8 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
             ),
             _buildRecap(),
-            Center(
-              child: Container(
+            const Center(
+              child: SizedBox(
                 width: 330,
                 child: Divider(
                   color: Color(0xFF0047AB),
@@ -42,8 +42,8 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
             ),
             _buildHelpCenter(),
-            Center(
-              child: Container(
+            const Center(
+              child: SizedBox(
                 width: 330,
                 child: Divider(
                   color: Color(0xFF0047AB),
@@ -84,23 +84,23 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
         ],
       ),
-      child: Column(
+      child: const Column(
         children: [
-          const CircleAvatar(
+          CircleAvatar(
             radius: 50,
             backgroundImage: AssetImage('assets/images/ktm.jpeg'),
           ),
-          const SizedBox(height: 15),
-          const Text(
+          SizedBox(height: 15),
+          Text(
             'Kinata Dewa Ariandi',
             style: TextStyle(
                 fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
           ),
-          const Text(
+          Text(
             '2241720087',
             style: TextStyle(fontSize: 16, color: Colors.white),
           ),
-          const Text(
+          Text(
             '\nJurusan Teknologi Informasi\nPoliteknik Negeri Malang',
             textAlign: TextAlign.center,
             style: TextStyle(fontSize: 12, color: Colors.white70),
@@ -146,11 +146,11 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Widget _buildHelpCenter() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+    return const Padding(
+      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: const [
+        children: [
           Text("Pusat Bantuan",
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
           SizedBox(height: 10),
@@ -163,11 +163,11 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Widget _buildSettings() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+    return const Padding(
+      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: const [
+        children: [
           Text("Pengaturan",
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
           SizedBox(height: 10),
@@ -201,7 +201,7 @@ class _ProfilePageState extends State<ProfilePage> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(title),
-          Text(value, style: TextStyle(fontWeight: FontWeight.bold)),
+          Text(value, style: const TextStyle(fontWeight: FontWeight.bold)),
         ],
       ),
     );
