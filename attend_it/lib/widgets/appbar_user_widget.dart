@@ -5,10 +5,10 @@ class AppbarUserWidget extends StatelessWidget implements PreferredSizeWidget {
   final String userId;
 
   const AppbarUserWidget({
-    Key? key,
+    super.key,
     required this.userName,
     required this.userId,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

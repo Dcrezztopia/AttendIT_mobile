@@ -8,7 +8,7 @@ import 'pages/home_page.dart'; // Import halaman HomePage dari folder pages
 import 'pages/presensi_page.dart'; // Import halaman PresensiPage dari folder pages
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
