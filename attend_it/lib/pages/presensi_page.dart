@@ -19,6 +19,7 @@ class _PresensiPageState extends State<PresensiPage> {
 
   List<Map<String, dynamic>> schedules = [
     {
+      "day": "Senin",
       "time": "07.00 - 12.10",
       "course": "Pemrograman Mobile",
       "lecturer": "Sofyan Noor Arief S.ST.,M.Kom",
@@ -26,6 +27,7 @@ class _PresensiPageState extends State<PresensiPage> {
       "isActive": true // Attendance is active
     },
     {
+      "day": "Senin",
       "time": "14.30 - 18.00",
       "course": "Metodologi Penelitian",
       "lecturer": "Ulla Rosiana",
@@ -33,6 +35,7 @@ class _PresensiPageState extends State<PresensiPage> {
       "isActive": true // Attendance is not active
     },
     {
+      "day": "Selasa",
       "time": "07.00 - 12.10",
       "course": "Pembelajaran Mesin",
       "lecturer": "Ely Setyo Astuti",
@@ -40,6 +43,7 @@ class _PresensiPageState extends State<PresensiPage> {
       "isActive": false
     },
     {
+      "day": "Selasa",
       "time": "14.30 - 16.20",
       "course": "Kewarganegaraan",
       "lecturer": "Dr. Widayaningish",
@@ -47,6 +51,7 @@ class _PresensiPageState extends State<PresensiPage> {
       "isActive": false
     },
     {
+      "day": "Rabu",
       "time": "07.00 - 10.30",
       "course": "Administrasi dan Keamanan Jaringan",
       "lecturer": "Ade Ismail",
@@ -54,6 +59,7 @@ class _PresensiPageState extends State<PresensiPage> {
       "isActive": true
     },
     {
+      "day": "Rabu",
       "time": "14.30 - 18.00",
       "course": "Bahasa Inggris Persiapan Kerja",
       "lecturer": "Atiqah Nurul Asri",
@@ -127,13 +133,29 @@ class _PresensiPageState extends State<PresensiPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      // Row for Time and Day
                       Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          const Icon(Icons.access_time,
-                              color: Color(0xFF0047AB)),
-                          const SizedBox(width: 6),
+                          Row(
+                            children: [
+                              const Icon(Icons.access_time,
+                                  color: Color(0xFF0047AB)),
+                              const SizedBox(width: 6),
+                              Text(
+                                schedule['time'] ?? '',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                  color: isActive
+                                      ? Colors.black
+                                      : Colors.grey[600],
+                                ),
+                              ),
+                            ],
+                          ),
                           Text(
-                            schedule['time'] ?? '',
+                            schedule['day'] ?? '', // Display the "day" text
                             style: TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.bold,
