@@ -28,6 +28,7 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  camera: ^0.11.0+2
   flutter:
     sdk: flutter
 
@@ -38,6 +39,8 @@ dependencies:
   url_launcher: ^6.0.12
   giffy_dialog: ^2.3.0
   iconsax_plus: ^1.0.0
+  path: ^1.9.0
+  path_provider: ^2.1.5
 
   # flutter_launcher_icons: latest
   # flutter_icons:
