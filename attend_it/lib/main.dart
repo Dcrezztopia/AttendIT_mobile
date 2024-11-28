@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
         '/home': (context) => const HomePage(),
         '/presensi': (context) => const PresensiPage(),
         '/histori': (context) => const HistoryPage(),
-        '/schedule' : (context) => const SchedulePage(),
+        '/schedule': (context) => const SchedulePage(),
         '/profile': (context) => const ProfilePage(),
       },
     );

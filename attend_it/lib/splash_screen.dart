@@ -54,8 +54,7 @@ class _SplashScreenState extends State<SplashScreen> {
               height: _logoSize,
               width: _logoSize,
               child: AnimatedOpacity(
-                duration:
-                    const Duration(
+                duration: const Duration(
                     seconds: 2), // Animation duration for opacity
                 opacity: _logoOpacity,
                 child: Image.asset(
