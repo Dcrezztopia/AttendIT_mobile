@@ -1,5 +1,7 @@
 import 'package:attend_it/widgets/bottom_nav_widget.dart';
+import 'package:attend_it/widgets/appbar_user_widget.dart';
 import 'package:flutter/material.dart';
+
 
 class HistoryPage extends StatefulWidget {
   const HistoryPage({Key? key}) : super(key: key);
@@ -7,31 +9,22 @@ class HistoryPage extends StatefulWidget {
   @override
   _HistoryPageState createState() => _HistoryPageState();
 }
-
 class _HistoryPageState extends State<HistoryPage> {
+
   String selectedMonth = 'September'; // Default selected month
   int _currentIndex = 2; // Current index for the bottom navigation bar
+  // Example user data
+  final String userName = "Kinata Dewa Ariandi";
+  final String userId = "2241720087";
 
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'Kinata Dewa Ariandi',
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-        ),
-        backgroundColor: const Color(0xFF0047AB),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 16.0),
-            child: Center(
-              child: Text(
-                '2241720087',
-                style: const TextStyle(fontSize: 16),
-              ),
-            ),
-          ),
-        ],
+
+      appBar: AppbarUserWidget(
+        userName: userName,
+        userId: userId,
       ),
       body: Column(
         children: [
@@ -109,9 +102,18 @@ class _HistoryPageState extends State<HistoryPage> {
     required Color statusColor,
   }) {
     return Card(
-      elevation: 4,
+      elevation: 6,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(15),
+      ),
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(15),
+          gradient: LinearGradient(
+            colors: [Colors.blue.shade50, Colors.white],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
       ),
       child: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -123,34 +125,50 @@ class _HistoryPageState extends State<HistoryPage> {
               style: const TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 16,
+                  color: Colors.black87,
               ),
             ),
             const SizedBox(height: 8),
             Text(
               course,
-              style: const TextStyle(fontSize: 14),
+                style: const TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.black87,
+                ),
             ),
             Text(
               lecturer,
-              style: const TextStyle(
+                style: TextStyle(
                 fontSize: 14,
-                color: Colors.grey,
+                  color: Colors.grey.shade600,
               ),
             ),
-            const SizedBox(height: 8),
+              const SizedBox(height: 12),
             Align(
               alignment: Alignment.centerRight,
-              child: Text(
-                status,
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 14,
-                  color: statusColor,
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 6,
+                  ),
+                  decoration: BoxDecoration(
+                    color: statusColor.withOpacity(0.2),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Text(
+                    status,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 14,
+                      color: statusColor,
+                    ),
                 ),
               ),
             ),
           ],
         ),
+      ),
       ),
     );
   }

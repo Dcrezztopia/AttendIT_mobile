@@ -36,7 +36,7 @@ class _SchedulePageState extends State<SchedulePage> {
           FeatureWidget(
             title: "Siakad",
             gradientColors: [
-              const Color(0XFFFFA4ED),
+              const Color.fromARGB(255, 54, 255, 238),
               const Color.fromARGB(255, 255, 255, 255),
             ],
             url: "https://siakad.polinema.ac.id/login/",
@@ -45,7 +45,7 @@ class _SchedulePageState extends State<SchedulePage> {
           FeatureWidget(
             title: "LMS",
             gradientColors: [
-              const Color.fromARGB(255, 237, 172, 80),
+              const Color.fromARGB(255, 255, 169, 48),
               const Color.fromARGB(255, 255, 255, 255),
             ],
             url: "https://lmsslc.polinema.ac.id/",
@@ -154,9 +154,9 @@ class FeatureWidget extends StatelessWidget {
     return GestureDetector(
       onTap: url != null ? () => _launchURL(context) : null,
       child: Container(
-        width: 380,
-        height: 100,
-        margin: const EdgeInsets.symmetric(vertical: 16),
+        width: MediaQuery.of(context).size.width * 0.9,
+        height: MediaQuery.of(context).size.height * 0.1,
+        margin: const EdgeInsets.symmetric(vertical: 19),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(15),
           gradient: LinearGradient(

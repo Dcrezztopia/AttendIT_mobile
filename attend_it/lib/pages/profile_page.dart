@@ -1,4 +1,5 @@
 import 'package:attend_it/widgets/bottom_nav_widget.dart';
+import 'package:attend_it/widgets/appbar_user_widget.dart';
 import 'package:flutter/material.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -13,44 +14,23 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
+
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SizedBox(height: 30), // Memberikan jarak di bagian atas
-            _buildHeader(),
-            const SizedBox(height: 20),
+            SizedBox(height: height * 0.05), // Memberikan jarak di bagian atas
+            _buildHeader(width),
+            SizedBox(height: height * 0.02),
             _buildStudentData(),
-            const Center(
-              child: SizedBox(
-                width: 330, // Atur lebar Divider sesuai keinginan
-                child: Divider(
-                  color: Color(0xFF0047AB), // Warna biru kustom
-                  thickness: 2,
-                ),
-              ),
-            ),
+            _buildDivider(width),
             _buildRecap(),
-            const Center(
-              child: SizedBox(
-                width: 330,
-                child: Divider(
-                  color: Color(0xFF0047AB),
-                  thickness: 2,
-                ),
-              ),
-            ),
+            _buildDivider(width),
             _buildHelpCenter(),
-            const Center(
-              child: SizedBox(
-                width: 330,
-                child: Divider(
-                  color: Color(0xFF0047AB),
-                  thickness: 2,
-                ),
-              ),
-            ),
+            _buildDivider(width),
             _buildSettings(),
           ],
         ),
@@ -66,10 +46,14 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  Widget _buildHeader() {
-    return Container(
-      width: double.infinity, // Menyesuaikan dengan lebar layar
-      padding: const EdgeInsets.symmetric(vertical: 30),
+  Widget _buildHeader(double width) {
+    return Align(
+      alignment: Alignment.topCenter, // Mengatur posisi ke atas
+      child: Container(
+        width: double.infinity,
+        padding: EdgeInsets.symmetric(
+          vertical: width * 0.08,
+        ),
       decoration: const BoxDecoration(
         color: Color(0xFF0C4DA2),
         borderRadius: BorderRadius.vertical(
@@ -106,6 +90,7 @@ class _ProfilePageState extends State<ProfilePage> {
             style: TextStyle(fontSize: 12, color: Colors.white70),
           ),
         ],
+      ),
       ),
     );
   }
@@ -171,30 +156,17 @@ class _ProfilePageState extends State<ProfilePage> {
           Text("Pengaturan",
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
           SizedBox(height: 10),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text("Bahasa"),
-              Row(
-                children: [
-                  Text("Indonesia"),
-                  Switch(value: false, onChanged: null),
-                  Text("English"),
-                ],
-              ),
-            ],
-          ),
           SizedBox(height: 10),
           Text("Atur Ulang Kata Sandi"),
           SizedBox(height: 10),
           Text("App Version", style: TextStyle(color: Colors.grey)),
-          Text("v.2.3.0"),
+          Text("beta"),
         ],
       ),
     );
   }
 
-  static Widget _buildDataRow(String title, String value) {
+  Widget _buildDataRow(String title, String value) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 2),
       child: Row(
@@ -203,6 +175,18 @@ class _ProfilePageState extends State<ProfilePage> {
           Text(title),
           Text(value, style: const TextStyle(fontWeight: FontWeight.bold)),
         ],
+      ),
+    );
+  }
+
+  Widget _buildDivider(double width) {
+    return Center(
+      child: SizedBox(
+        width: width * 0.8, // Atur lebar Divider sesuai lebar layar
+        child: const Divider(
+          color: Color(0xFF0047AB),
+          thickness: 2,
+        ),
       ),
     );
   }
