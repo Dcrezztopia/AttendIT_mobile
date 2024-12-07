@@ -43,6 +43,8 @@ dependencies:
   path_provider: ^2.1.5
   flutter_month_picker: ^0.0.2
   image_picker: ^1.1.2
+  carousel_slider: ^5.0.0
+  intl: ^0.17.0
 
 
   
@@ -87,6 +89,7 @@ flutter:
     - assets/images/jadwal2.png
     - assets/images/siakad.png
     - assets/images/web.png
+    - assets/images/webPol.png
     - assets/images/giphy.gif
  
 

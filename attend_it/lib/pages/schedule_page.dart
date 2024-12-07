@@ -36,7 +36,7 @@ class _SchedulePageState extends State<SchedulePage> {
           FeatureWidget(
             title: "Siakad",
             gradientColors: [
-              const Color.fromARGB(255, 54, 255, 238),
+              const Color(0xFF9B29F1),
               const Color.fromARGB(255, 255, 255, 255),
             ],
             url: "https://siakad.polinema.ac.id/login/",
@@ -45,7 +45,7 @@ class _SchedulePageState extends State<SchedulePage> {
           FeatureWidget(
             title: "LMS",
             gradientColors: [
-              const Color.fromARGB(255, 255, 169, 48),
+              const Color.fromARGB(255, 255, 220, 45),
               const Color.fromARGB(255, 255, 255, 255),
             ],
             url: "https://lmsslc.polinema.ac.id/",
@@ -59,6 +59,15 @@ class _SchedulePageState extends State<SchedulePage> {
             ],
             url: "https://jti.polinema.ac.id/",
             imagePath: 'assets/images/web.png',
+          ),
+          FeatureWidget(
+            title: "Website Polinema",
+            gradientColors: [
+              const Color.fromARGB(255, 48, 169, 255),
+              const Color.fromARGB(255, 255, 255, 255),
+            ],
+            url: "https://www.polinema.ac.id/",
+            imagePath: 'assets/images/webPol.png',
           ),
           Expanded(
             child: Container(), // Placeholder untuk mengisi ruang kosong

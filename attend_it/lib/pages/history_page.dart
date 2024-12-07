@@ -1,7 +1,7 @@
 import 'package:attend_it/widgets/bottom_nav_widget.dart';
 import 'package:attend_it/widgets/appbar_user_widget.dart';
 import 'package:flutter/material.dart';
-
+import 'package:intl/intl.dart';
 
 class HistoryPage extends StatefulWidget {
   const HistoryPage({Key? key}) : super(key: key);
@@ -40,20 +40,47 @@ class _HistoryPageState extends State<HistoryPage> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                DropdownButton<String>(
-                  value: selectedMonth,
-                  items: <String>['September', 'October', 'November']
-                      .map((String month) {
-                    return DropdownMenuItem<String>(
-                      value: month,
-                      child: Text(month),
+                InkWell(
+                  onTap: () async {
+                    DateTime? pickedDate = await showDatePicker(
+                      context: context,
+                      initialDate: DateTime.now(),
+                      firstDate: DateTime(2000), // Rentang awal
+                      lastDate: DateTime(2100), // Rentang akhir
+                      initialDatePickerMode:
+                          DatePickerMode.year, // Fokus di tahun
+                      helpText: "Pilih Bulan", // Judul picker
                     );
-                  }).toList(),
-                  onChanged: (String? newValue) {
-                    setState(() {
-                      selectedMonth = newValue!;
-                    });
+                    if (pickedDate != null) {
+                      setState(() {
+                        selectedMonth = DateFormat('MMMM')
+                            .format(pickedDate); // Format bulan
+                      });
+                    }
                   },
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 8,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.grey.shade200,
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(color: Colors.grey),
+                    ),
+                    child: Row(
+                      children: [
+                        Text(
+                          selectedMonth,
+                          style: const TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.w500),
+                        ),
+                        const SizedBox(width: 4),
+                        const Icon(Icons.calendar_today,
+                            size: 18, color: Colors.grey),
+                      ],
+                    ),
+                  ),
                 ),
               ],
             ),
