@@ -1,17 +1,14 @@
+import 'package:attend_it/provider/auth_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class AppbarUserWidget extends StatelessWidget implements PreferredSizeWidget {
-  final String userName;
-  final String userId;
-
-  const AppbarUserWidget({
-    super.key,
-    required this.userName,
-    required this.userId,
-  });
+class AppbarUserWidget extends ConsumerWidget implements PreferredSizeWidget {
+  const AppbarUserWidget({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final authState = ref.watch(authProvider);
+    final mahasiswa = authState.mahasiswa;
     return AppBar(
       automaticallyImplyLeading: false,
       title: Container(
@@ -21,7 +18,7 @@ class AppbarUserWidget extends StatelessWidget implements PreferredSizeWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              userName,
+              mahasiswa != null ? mahasiswa['nama_mahasiswa'] : 'Nama Mahasiswa',
               style: const TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
@@ -29,7 +26,7 @@ class AppbarUserWidget extends StatelessWidget implements PreferredSizeWidget {
               ),
             ),
             Text(
-              userId,
+              mahasiswa != null ? mahasiswa['nim'] : 'NIM',
               style: const TextStyle(
                 fontSize: 14,
                 color: Color.fromARGB(199, 255, 255, 255),

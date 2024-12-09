@@ -1,27 +1,38 @@
+import 'package:attend_it/provider/auth_provider.dart';
 import 'package:attend_it/widgets/bottom_nav_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
-class ProfilePage extends StatefulWidget {
+class ProfilePage extends ConsumerStatefulWidget {
   const ProfilePage({super.key});
 
   @override
-  State<ProfilePage> createState() => _ProfilePageState();
+  _ProfilePageState createState() => _ProfilePageState();
 }
 
-class _ProfilePageState extends State<ProfilePage> {
+class _ProfilePageState extends ConsumerState<ProfilePage> {
   int _currentIndex = 4;
+
+  void _logout() async { 
+    final authNotifier = ref.read(authProvider.notifier); 
+    await authNotifier.logout(); 
+    context.go('/login'); }
 
   @override
   Widget build(BuildContext context) {
+    final authState = ref.watch(authProvider); 
+    final mahasiswa = authState.mahasiswa;
+    
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(height: 30), // Memberikan jarak di bagian atas
-            _buildHeader(),
+            _buildHeader(mahasiswa),
             const SizedBox(height: 20),
-            _buildStudentData(),
+            _buildStudentData(mahasiswa),
             const Center(
               child: SizedBox(
                 width: 330, // Atur lebar Divider sesuai keinginan
@@ -66,7 +77,7 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  Widget _buildHeader() {
+  Widget _buildHeader(Map<String, dynamic>? mahasiswa) {
     return Container(
       width: double.infinity, // Menyesuaikan dengan lebar layar
       padding: const EdgeInsets.symmetric(vertical: 30),
@@ -84,23 +95,23 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
         ],
       ),
-      child: const Column(
+      child: Column(
         children: [
-          CircleAvatar(
+          const CircleAvatar(
             radius: 50,
             backgroundImage: AssetImage('assets/images/ktm.jpeg'),
           ),
-          SizedBox(height: 15),
+          const SizedBox(height: 15),
           Text(
-            'Kinata Dewa Ariandi',
-            style: TextStyle(
+            mahasiswa != null ? mahasiswa['nama_mahasiswa'] : 'Nama Mahasiswa',
+            style: const TextStyle(
                 fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
           ),
           Text(
-            '2241720087',
-            style: TextStyle(fontSize: 16, color: Colors.white),
+            mahasiswa != null ? mahasiswa['nim'] : 'NIM',
+            style: const TextStyle(fontSize: 16, color: Colors.white),
           ),
-          Text(
+          const Text(
             '\nJurusan Teknologi Informasi\nPoliteknik Negeri Malang',
             textAlign: TextAlign.center,
             style: TextStyle(fontSize: 12, color: Colors.white70),
@@ -110,7 +121,7 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  Widget _buildStudentData() {
+  Widget _buildStudentData(Map<String, dynamic>? mahasiswa) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(
@@ -119,9 +130,9 @@ class _ProfilePageState extends State<ProfilePage> {
           const Text("Data Mahasiswa",
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
           const SizedBox(height: 10),
-          _buildDataRow("NIM", "2241720087"),
-          _buildDataRow("Kelas", "TI 3B"),
-          _buildDataRow("Program Studi", "D-IV Teknik Informatika"),
+          _buildDataRow("NIM", mahasiswa != null ? mahasiswa['nim'] : 'NIM'),
+          _buildDataRow("Kelas", mahasiswa != null ? mahasiswa['nama_kelas'] : 'Kelas'),
+          _buildDataRow("Program Studi", mahasiswa != null ? mahasiswa['prodi'] : 'Program Studi'),
           _buildDataRow("Jurusan", "Teknologi Informasi"),
         ],
       ),
@@ -163,32 +174,29 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Widget _buildSettings() {
-    return const Padding(
-      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text("Pengaturan",
+          const Text("Pengaturan",
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-          SizedBox(height: 10),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text("Bahasa"),
-              Row(
-                children: [
-                  Text("Indonesia"),
-                  Switch(value: false, onChanged: null),
-                  Text("English"),
-                ],
-              ),
-            ],
+          const SizedBox(height: 10),
+          const Text("Atur Ulang Kata Sandi"),
+          const SizedBox(height: 10),
+          const Text("App Version", style: TextStyle(color: Colors.grey)),
+          const Text("v.2.3.0"),
+          const SizedBox(height: 10),
+          GestureDetector( 
+            onTap: _logout, child: 
+            const Text( 
+              'Keluar Aplikasi', 
+              style: TextStyle( 
+                color: Colors.red, 
+                fontWeight: FontWeight.bold, 
+              ), 
+            ), 
           ),
-          SizedBox(height: 10),
-          Text("Atur Ulang Kata Sandi"),
-          SizedBox(height: 10),
-          Text("App Version", style: TextStyle(color: Colors.grey)),
-          Text("v.2.3.0"),
         ],
       ),
     );

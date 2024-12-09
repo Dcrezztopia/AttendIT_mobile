@@ -1,27 +1,26 @@
 // pages/home_page.dart
-import 'package:attend_it/pages/history_page.dart';
-import 'package:attend_it/pages/profile_page.dart';
-import 'package:attend_it/pages/schedule_page.dart';
+import 'package:attend_it/provider/auth_provider.dart';
 import 'package:attend_it/widgets/bottom_nav_widget.dart';
-import 'package:attend_it/pages/presensi_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
-class HomePage extends StatefulWidget {
+class HomePage extends ConsumerStatefulWidget {
   const HomePage({super.key});
 
   @override
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends ConsumerState<HomePage> {
   int _currentIndex = 0;
 
   @override
   Widget build(BuildContext context) {
+    final authState = ref.watch(authProvider);
+    print('HomePage: Mahasiswa = ${authState.mahasiswa}');
+    
     return Scaffold(
-      // appBar: AppBar(
-      //   title: Text('Home'),
-      // ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: SingleChildScrollView(
@@ -39,9 +38,11 @@ class _HomePageState extends State<HomePage> {
                   color: Color(0xFF0047AB)
                 ),
               ),
-              const Text(
-                'Kinata Dewa Ariandi',
-                style: TextStyle(
+              Text(
+                authState.mahasiswa != null 
+                  ? authState.mahasiswa!['nama_mahasiswa'] 
+                  : 'Pengguna',
+                style: const TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 25,
                   fontWeight: FontWeight.bold,
@@ -69,11 +70,7 @@ class _HomePageState extends State<HomePage> {
                           isGradient: true,
                           gradientColors: [Colors.green[800]!, Colors.green[300]!],
                           onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const SchedulePage()),
-                            );
+                            context.go('/schedule');
                           },
                         ),
                         const SizedBox(height: 32), // Jarak antar item
@@ -88,11 +85,7 @@ class _HomePageState extends State<HomePage> {
                           isGradient: true,
                           gradientColors: [Colors.blue[800]!, Colors.blue[300]!],
                           onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const HistoryPage()),
-                            );
+                            context.go('/histori');
                           },
                         ),
                       ],
@@ -121,11 +114,7 @@ class _HomePageState extends State<HomePage> {
                             const Color(0xFFDBB0FD),
                           ],
                           onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const PresensiPage()),
-                            );
+                            context.go('/presensi');
                           },
                         ),
                         const SizedBox(height: 32), // Jarak antar item
@@ -140,11 +129,7 @@ class _HomePageState extends State<HomePage> {
                           isGradient: true,
                           gradientColors: [Colors.orange[800]!, Colors.orange[300]!],
                           onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const ProfilePage()),
-                            );
+                            context.go('/profile');
                           },
                         ),
                       ],

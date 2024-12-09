@@ -1,16 +1,18 @@
 import 'dart:async'; // For Future.delayed
 import 'package:attend_it/pages/login_page.dart';
+import 'package:attend_it/provider/auth_provider.dart';
 import 'package:flutter/material.dart';
-// import './pages/home_page.dart'; // Import halaman utama
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
-class SplashScreen extends StatefulWidget {
+class SplashScreen extends ConsumerStatefulWidget {
   const SplashScreen({super.key});
 
   @override
   _SplashScreenState createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> {
+class _SplashScreenState extends ConsumerState<SplashScreen> {
   // Control for opacity and size animation
   double _logoSize = 100;
   double _logoOpacity = 0.0;
@@ -19,23 +21,28 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     _startAnimation(); // Start animation when splash screen loads
-
-    // Navigate to the HomePage after 3 seconds
-    Future.delayed(const Duration(seconds: 3), () {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-            builder: (context) => const LoginPage()), // Redirect to HomePage
-      );
-    });
   }
 
   // Start animation by setting new size and opacity values
   void _startAnimation() {
     Future.delayed(const Duration(milliseconds: 500), () {
-      setState(() {
-        _logoSize = 200; // Grow the logo size
-        _logoOpacity = 1.0; // Fade in the logo
+      if (mounted) {
+        setState(() {
+          _logoSize = 200; // Grow the logo size
+          _logoOpacity = 1.0; // Fade in the logo
+        });
+      }
+    }).then((_) {
+      Future.delayed(const Duration(seconds: 3), () {
+        if (mounted) {
+          final authState = ref.read(authProvider);
+          debugPrint('Auth State: ${authState.isAuthenticated}');
+          if (authState.isAuthenticated) {
+            context.go('/home');
+          } else {
+            context.go('/login');
+          }
+        }
       });
     });
   }

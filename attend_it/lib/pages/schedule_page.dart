@@ -1,61 +1,56 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../widgets/appbar_user_widget.dart';
 import '../widgets/bottom_nav_widget.dart';
 
-class SchedulePage extends StatefulWidget {
+class SchedulePage extends ConsumerStatefulWidget {
   const SchedulePage({super.key});
 
   @override
-  State<SchedulePage> createState() => _SchedulePageState();
+  _SchedulePageState createState() => _SchedulePageState();
 }
 
-class _SchedulePageState extends State<SchedulePage> {
+class _SchedulePageState extends ConsumerState<SchedulePage> {
   int _currentIndex = 3;
-
-  final String userName = "Kinata Dewa Ariandi"; // Ganti dengan data user login
-  final String userId = "2241720087"; // Ganti dengan data user login
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppbarUserWidget(
-        userName: userName,
-        userId: userId,
-      ),
+      appBar: const AppbarUserWidget(),
       body: Column(
         children: [
-          FeatureWidget(
+          const FeatureWidget(
             title: "Jadwal",
             gradientColors: [
-              const Color.fromARGB(255, 73, 89, 208),
-              const Color.fromARGB(255, 255, 255, 255),
+              Color.fromARGB(255, 73, 89, 208),
+              Color.fromARGB(255, 255, 255, 255),
             ],
             imagePath: 'assets/images/jadwal2.png',
           ),
-          FeatureWidget(
+          const FeatureWidget(
             title: "Siakad",
             gradientColors: [
-              const Color(0XFFFFA4ED),
-              const Color.fromARGB(255, 255, 255, 255),
+              Color(0XFFFFA4ED),
+              Color.fromARGB(255, 255, 255, 255),
             ],
             url: "https://siakad.polinema.ac.id/login/",
             imagePath: 'assets/images/siakad.png',
           ),
-          FeatureWidget(
+          const FeatureWidget(
             title: "LMS",
             gradientColors: [
-              const Color.fromARGB(255, 237, 172, 80),
-              const Color.fromARGB(255, 255, 255, 255),
+              Color.fromARGB(255, 237, 172, 80),
+              Color.fromARGB(255, 255, 255, 255),
             ],
             url: "https://lmsslc.polinema.ac.id/",
             imagePath: 'assets/images/lms.png',
           ),
-          FeatureWidget(
+          const FeatureWidget(
             title: "Website JTI",
             gradientColors: [
-              const Color(0XFFFF3F3B),
-              const Color.fromARGB(255, 255, 255, 255),
+              Color(0XFFFF3F3B),
+              Color.fromARGB(255, 255, 255, 255),
             ],
             url: "https://jti.polinema.ac.id/",
             imagePath: 'assets/images/web.png',

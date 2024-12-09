@@ -1,3 +1,4 @@
+import 'package:go_router/go_router.dart';
 import 'package:iconsax_plus/iconsax_plus.dart';
 import 'package:flutter/material.dart';
 
@@ -20,23 +21,19 @@ class BottomNavBarWidget extends StatelessWidget {
       unselectedItemColor: Colors.grey,
       onTap: (index) {
         if (index == 0) {
-          Navigator.pushNamed(context, '/home'); // Navigasi ke halaman History
+          context.go('/home'); // Navigasi ke halaman Home
         }
         if (index == 1) {
-          Navigator.pushNamed(
-              context, '/presensi'); // Navigasi ke halaman History
+          context.go('/presensi'); // Navigasi ke halaman Presensi
         }
         if (index == 2) {
-          Navigator.pushNamed(
-              context, '/histori'); // Navigasi ke halaman History
+          context.go('/histori'); // Navigasi ke halaman Histori
         }
         if (index == 3) {
-          Navigator.pushNamed(
-              context, '/schedule'); // Navigasi ke halaman History
+          context.go('/schedule'); // Navigasi ke halaman Schedule
         }
         if (index == 4) {
-          Navigator.pushNamed(
-              context, '/profile'); // Navigasi ke halaman History
+          context.go('/profile'); // Navigasi ke halaman Profile
         }
         onTap(index); // Tetap panggil fungsi onTap eksternal
       },

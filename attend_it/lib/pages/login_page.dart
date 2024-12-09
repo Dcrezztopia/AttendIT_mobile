@@ -1,20 +1,55 @@
 import 'package:attend_it/pages/home_page.dart';
+import 'package:attend_it/provider/auth_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+class LoginPage extends ConsumerStatefulWidget {
+  const LoginPage({Key? key}) : super(key: key);
 
   @override
   _LoginPageState createState() => _LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _LoginPageState extends ConsumerState<LoginPage> {
+  final _usernameController = TextEditingController();
+  final _passwordController = TextEditingController();
   bool _isObscured = true;
+  bool _isLoading = false;
 
   void _togglePasswordView() {
     setState(() {
       _isObscured = !_isObscured;
     });
+  }
+  // Handle login action
+  void _login() async {
+    final username = _usernameController.text.trim();
+    final password = _passwordController.text.trim();
+
+    if (username.isEmpty || password.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please enter both username and password.')),
+      );
+      return;
+    }
+
+    setState(() { 
+      _isLoading = true; // Show loading indicator 
+    });
+
+    try {
+      final notifier = ref.read(authProvider.notifier);
+      await notifier.login(username, password);
+      context.go('/home');
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Login failed: $e')),
+      );
+    } finally { setState(() { 
+      _isLoading = false; // Hide loading indicator 
+      }); 
+    }
   }
 
   @override
@@ -56,14 +91,14 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 const SizedBox(height: 30),
 
-                // NIM Input
+                // username Input
                 TextFormField(
+                  controller: _usernameController,
                   decoration: InputDecoration(
-                    hintText: 'NIM',
+                    hintText: 'Username',
                     hintStyle: TextStyle(color: Colors.grey.shade400),
                     filled: true,
                     fillColor: const Color(0xFFF3F4F6),
-                    floatingLabelBehavior: FloatingLabelBehavior.never,
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
                       borderSide: BorderSide.none,
@@ -74,22 +109,19 @@ class _LoginPageState extends State<LoginPage> {
 
                 // Password Input with Toggle Visibility
                 TextFormField(
+                  controller: _passwordController,
                   obscureText: _isObscured,
                   decoration: InputDecoration(
                     hintText: 'Password',
                     hintStyle: TextStyle(color: Colors.grey.shade400),
                     filled: true,
                     fillColor: const Color(0xFFF3F4F6),
-                    floatingLabelBehavior: FloatingLabelBehavior.never,
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
                       borderSide: BorderSide.none,
                     ),
                     suffixIcon: IconButton(
-                      icon: Icon(
-                        _isObscured ? Icons.visibility_off : Icons.visibility,
-                        color: Colors.grey,
-                      ),
+                      icon: Icon(_isObscured ? Icons.visibility_off : Icons.visibility),
                       onPressed: _togglePasswordView,
                     ),
                   ),
@@ -113,20 +145,12 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 const SizedBox(height: 20),
 
-                // Login Button and Fingerprint Icon
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     // Login Button
                     ElevatedButton(
-                      onPressed: () {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const HomePage(),
-                          ),
-                        );
-                      },
+                      onPressed: _login,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFFF2B400),
                         padding: const EdgeInsets.symmetric(
@@ -135,23 +159,15 @@ class _LoginPageState extends State<LoginPage> {
                           borderRadius: BorderRadius.circular(20),
                         ),
                       ),
-                      child: const Text(
-                        'LOGIN',
-                        style: TextStyle(
-                            color: Colors.white, fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                    const SizedBox(width: 5),
-
-                    // Fingerprint Icon
-                    CircleAvatar(
-                      backgroundColor: const Color(0xFFF2B400).withOpacity(0.2),
-                      radius: 25,
-                      child: const Icon(
-                        Icons.fingerprint,
-                        size: 40,
-                        color: Color(0xFFF2B400),
-                      ),
+                      child: _isLoading 
+                        ? const CircularProgressIndicator( 
+                            valueColor: AlwaysStoppedAnimation<Color>(Colors.white), 
+                          ) 
+                        : const Text( 
+                            'LOGIN', 
+                            style: TextStyle( 
+                              color: Colors.white, fontWeight: FontWeight.bold), 
+                          ),
                     ),
                   ],
                 ),
