@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:attend_it/provider/api_config.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -50,7 +51,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
     state = state.copyWith(isLoading: true);
     try {
       final response = await http.post(
-        Uri.parse('http://127.0.0.1:8000/api/login'),
+        Uri.parse('$baseUrl/login'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
@@ -113,11 +114,11 @@ class AuthNotifier extends StateNotifier<AuthState> {
 
       final token = prefs.getString('token');
       print('Token found: $token');
-      state = state.copyWith(isAuthenticated: true, token: token, isLoading: true);
+      // state = state.copyWith(isAuthenticated: true, token: token, isLoading: true);
 
       // Fetch user profile 
       await getProfile(token);
-      state = state.copyWith(isAuthenticated: true, token: token, isLoading: false);
+      // state = state.copyWith(isAuthenticated: true, token: token, isLoading: false);
     } catch (e) {
       state = AuthState.initial();
       print('Error in tryAutoLogin: $e');
@@ -129,7 +130,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
   Future<void> getProfile(String? token) async { 
     try { 
       final response = await http.get( 
-        Uri.parse('http://127.0.0.1:8000/api/profile'), 
+        Uri.parse('$baseUrl/profile'), 
         headers: { 
           'Authorization': 'Bearer $token', 
         }, 
