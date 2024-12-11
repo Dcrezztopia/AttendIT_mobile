@@ -16,7 +16,7 @@ class ImageUploadService {
   Future<Map<String, dynamic>> handleImageUpload(File imageFile, BuildContext context) async {
     try {
       // Update URL to match your FastAPI endpoint
-      final url = Uri.parse("http://10.0.2.2:8000/recognize/");
+      final url = Uri.parse("http://10.0.2.2:8001/recognize/");
       
       final mimeType = lookupMimeType(imageFile.path);
       
