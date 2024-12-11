@@ -1,3 +1,4 @@
+import 'package:attend_it/pages/camera_page.dart';
 import 'package:attend_it/pages/history_page.dart';
 import 'package:attend_it/pages/home_page.dart';
 import 'package:attend_it/pages/login_page.dart';
@@ -59,6 +60,10 @@ class _MyAppState extends ConsumerState<MyApp> {
         GoRoute(
           path: '/profile',
           builder: (context, state) => const ProfilePage(),
+        ),
+        GoRoute(
+          path: '/camera',
+          builder: (context, state) => const CameraPage(),
         ),
       ],
       // redirect: (context, state) {

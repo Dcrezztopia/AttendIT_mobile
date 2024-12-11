@@ -1,11 +1,13 @@
 import 'dart:io';
+import 'package:attend_it/models/schedule.dart';
 import 'package:attend_it/widgets/bottom_nav_widget.dart';
 import 'package:flutter/material.dart';
 
 class ApprovingPage extends StatefulWidget {
   final String imagePath;
+  final Schedule selectedSchedule;
 
-  const ApprovingPage({Key? key, required this.imagePath}) : super(key: key);
+  const ApprovingPage({Key? key, required this.imagePath, required this.selectedSchedule}) : super(key: key);
 
   @override
   _ApprovingPageState createState() => _ApprovingPageState();
@@ -53,6 +55,7 @@ class _ApprovingPageState extends State<ApprovingPage> {
                           const Icon(Icons.access_time, size: 16),
                           const SizedBox(width: 8),
                           Text(
+                            // get tanggal dan waktu tepat melakukan pengambilan gambar
                             '07:15:50 11-11-2021',
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
@@ -73,6 +76,7 @@ class _ApprovingPageState extends State<ApprovingPage> {
                       ),
                       const SizedBox(height: 4),
                       const Text(
+                        // get waktu melakukan pengambilan gambar
                         '06:50:45 WIB',
                         style: TextStyle(fontSize: 14, color: Colors.black),
                       ),
@@ -87,8 +91,35 @@ class _ApprovingPageState extends State<ApprovingPage> {
                       ),
                       const SizedBox(height: 4),
                       const Text(
+                        // perhitungan set waktuMulai - waktu pengambilan gambar
                         '00:00:00',
                         style: TextStyle(fontSize: 14, color: Colors.black),
+                      ),
+                      Text(
+                        'Mata Kuliah',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                          color: Colors.grey[800],
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        widget.selectedSchedule.namaMatkul,
+                        style: const TextStyle(fontSize: 14, color: Colors.black),
+                      ),
+                      Text(
+                        'Dosen',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                          color: Colors.grey[800],
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        widget.selectedSchedule.namaDosen,
+                        style: const TextStyle(fontSize: 14, color: Colors.black),
                       ),
                     ],
                   ),
@@ -97,11 +128,11 @@ class _ApprovingPageState extends State<ApprovingPage> {
             ),
           ),
           const SizedBox(height: 20), // Add spacing
-          Center(
+          const Center(
             child: CircleAvatar(
               radius: 40,
               backgroundColor: Colors.green,
-              child: const Icon(
+              child: Icon(
                 Icons.check,
                 color: Colors.white,
                 size: 40,
