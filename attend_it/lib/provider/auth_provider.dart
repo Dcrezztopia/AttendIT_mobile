@@ -1,8 +1,9 @@
 import 'dart:convert';
-import 'package:attend_it/provider/api_config.dart';
+import 'package:attend_it/services/api_config.dart';
+import 'package:attend_it/services/secure_storage_service.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
+// import 'package:shared_preferences/shared_preferences.dart';
 
 /// Provider for managing authentication state.
 final authProvider = StateNotifierProvider<AuthNotifier, AuthState>((ref) {
@@ -44,6 +45,8 @@ class AuthState {
 
 /// StateNotifier to handle authentication logic.
 class AuthNotifier extends StateNotifier<AuthState> {
+  final SecureStorageService _storageService = SecureStorageService();
+  
   AuthNotifier() : super(AuthState.initial());
 
   /// Login the user with the provided credentials.
@@ -66,12 +69,16 @@ class AuthNotifier extends StateNotifier<AuthState> {
         final token = data['token'];
         final user = data['user'];
 
-        // Save token to shared preferences
-        SharedPreferences prefs = await SharedPreferences.getInstance();
-        await prefs.setString('token', token);
+        // Simpan token menggunakan Secure Storage
+        await _storageService.writeToken(token);
 
         // Update state
-        state = AuthState(isAuthenticated: true, token: token, user: user, isLoading: true);
+        state = AuthState(
+          isAuthenticated: true,
+          token: token,
+          user: user,
+          isLoading: true,
+        );
 
         // Fetch user profile 
         await getProfile(token);
@@ -89,9 +96,8 @@ class AuthNotifier extends StateNotifier<AuthState> {
   /// Logout the current user.
   Future<void> logout() async {
     try {
-      // Remove token from shared preferences
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      await prefs.remove('token');
+      // Hapus token menggunakan Secure Storage
+      await _storageService.deleteToken();
 
       // Update state
       state = AuthState.initial();
@@ -105,14 +111,12 @@ class AuthNotifier extends StateNotifier<AuthState> {
   Future<void> tryAutoLogin() async {
     state = state.copyWith(isLoading: true);
     try {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      if (!prefs.containsKey('token')) {
+      final token = await _storageService.readToken();
+      if (token == null || token.isEmpty) {
         print('Token not found');
-        state = state.copyWith(isLoading: false); // Pastikan loading berhenti
+        state = state.copyWith(isLoading: false);
         return;
       }
-
-      final token = prefs.getString('token');
       print('Token found: $token');
       // state = state.copyWith(isAuthenticated: true, token: token, isLoading: true);
 

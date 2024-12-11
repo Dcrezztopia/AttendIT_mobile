@@ -61,27 +61,28 @@ class _MyAppState extends ConsumerState<MyApp> {
           builder: (context, state) => const ProfilePage(),
         ),
       ],
-      redirect: (context, state) {
-        final authState = ref.read(authProvider);
-        // Redirect to login if not authenticated and trying to access a restricted page
-        final isAuthenticated = authState.isAuthenticated;
-        final isLoading = authState.isLoading;
-        final isLoggingIn = state.uri.toString() == '/login';
+      // redirect: (context, state) {
+      //   final authState = ref.read(authProvider);
+      //   // Redirect to login if not authenticated and trying to access a restricted page
+      //   final isAuthenticated = authState.isAuthenticated;
+      //   print(isAuthenticated);
+      //   final isLoading = authState.isLoading;
+      //   final isLoggingIn = state.uri.toString() == '/login';
 
-        if (isLoading) { 
-          return '/';
-        }
+      //   if (isLoading) { 
+      //     context.go('/');
+      //   }
 
-        if (!isAuthenticated && !isLoggingIn) {
-          return '/login';
-        }
+      //   if (!isAuthenticated && !isLoggingIn) {
+      //     context.go('/login');
+      //   }
 
-        if (isAuthenticated && isLoggingIn) {
-          return '/home';
-        }
+      //   if (isAuthenticated && isLoggingIn) {
+      //     context.go('/home');
+      //   }
 
-        return null;
-      },
+      //   return null;
+      // },
     );
   }
   

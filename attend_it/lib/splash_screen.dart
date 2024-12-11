@@ -36,7 +36,6 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
       Future.delayed(const Duration(seconds: 3), () {
         if (mounted) {
           final authState = ref.read(authProvider);
-          debugPrint('Auth State: ${authState.isAuthenticated}');
           if (authState.isAuthenticated) {
             context.go('/home');
           } else {

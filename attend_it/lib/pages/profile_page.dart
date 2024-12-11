@@ -17,6 +17,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
   void _logout() async { 
     final authNotifier = ref.read(authProvider.notifier); 
     await authNotifier.logout(); 
+    // ignore: use_build_context_synchronously
     context.go('/login'); }
 
   @override
@@ -29,7 +30,6 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SizedBox(height: 30), // Memberikan jarak di bagian atas
             _buildHeader(mahasiswa),
             const SizedBox(height: 20),
             _buildStudentData(mahasiswa),
@@ -97,6 +97,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
       ),
       child: Column(
         children: [
+          const SizedBox(height: 16,),
           const CircleAvatar(
             radius: 50,
             backgroundImage: AssetImage('assets/images/ktm.jpeg'),

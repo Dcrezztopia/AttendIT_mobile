@@ -1,45 +1,37 @@
 class Schedule {
   final int id;
-  final String day;
-  final String timeStart;
-  final String timeEnd;
-  final String room;
+  final String hari;
+  final String waktuMulai;
+  final String waktuSelesai;
+  final String ruangKelas;
+  final String status;
   final String namaDosen;
   final String namaMatkul;
-  final String status;
+  // final bool isActive;
 
   Schedule({
     required this.id,
-    required this.day,
-    required this.timeStart,
-    required this.timeEnd,
-    required this.room,
+    required this.hari,
+    required this.waktuMulai,
+    required this.waktuSelesai,
+    required this.ruangKelas,
+    required this.status,
     required this.namaDosen,
     required this.namaMatkul,
-    required this.status,
+    // required this.isActive,
   });
 
   factory Schedule.fromJson(Map<String, dynamic> json) {
     return Schedule(
       id: json['id'],
-      day: json['hari'],
-      timeStart: json['waktu_mulai'],
-      timeEnd: json['waktu_selesai'],
-      room: json['ruang_kelas'],
+      hari: json['hari'],
+      waktuMulai: json['waktu_mulai'],
+      waktuSelesai: json['waktu_selesai'],
+      ruangKelas: json['ruang_kelas'],
+      status: json['status'],
       namaDosen: json['nama_dosen'],
       namaMatkul: json['nama_matkul'],
-      status: json['status'],
+      // isActive: json['status'] == "1", // Ubah status ke boolean
     );
   }
-
-  Map<String, dynamic> toMap() { 
-    return { 
-      'id': id, 
-      'hari': day, 
-      'waktu_mulai': timeStart, 
-      'waktu_selesai': timeEnd, 
-      'ruang_kelas': room, 
-      'status': status, 
-      'nama_dosen': namaDosen, 
-      'nama_matkul': namaMatkul, }; }
 }
