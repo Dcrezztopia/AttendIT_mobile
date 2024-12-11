@@ -5,6 +5,7 @@ import 'package:attend_it/pages/login_page.dart';
 import 'package:attend_it/pages/presensi_page.dart';
 import 'package:attend_it/pages/profile_page.dart';
 import 'package:attend_it/pages/schedule_page.dart';
+import 'package:attend_it/pages/register_page.dart';
 import 'package:attend_it/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -64,6 +65,10 @@ class _MyAppState extends ConsumerState<MyApp> {
         GoRoute(
           path: '/camera',
           builder: (context, state) => const CameraPage(),
+        ),
+        GoRoute(
+          path: '/register',
+          builder: (context, state) => const RegisterPage(),
         ),
       ],
       // redirect: (context, state) {

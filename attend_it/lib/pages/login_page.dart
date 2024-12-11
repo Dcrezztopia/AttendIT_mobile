@@ -171,6 +171,13 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                     ),
                   ],
                 ),
+                TextButton(
+                  onPressed: () => context.go('/register'),
+                  child: const Text(
+                    'Don\'t have an account? Register',
+                    style: TextStyle(color: Color(0xFF0047AB)),
+                  ),
+                ),
               ],
             ),
           ),
