@@ -9,6 +9,7 @@ class ScheduleNotifier extends StateNotifier<List<Schedule>> {
   ScheduleNotifier() : super([]);
 
   final SecureStorageService _storage = SecureStorageService();
+  Schedule? selectedSchedule; // Jadwal yang dipilih
 
   // Fetch schedules from API
   Future<void> fetchSchedules() async {
@@ -47,6 +48,12 @@ class ScheduleNotifier extends StateNotifier<List<Schedule>> {
       state = [];
     }
   }
+
+    // Fungsi untuk menyimpan jadwal pilihan
+    void selectSchedule(Schedule schedule) {
+      selectedSchedule = schedule;
+    }
+  
 }
 
 final scheduleProvider =

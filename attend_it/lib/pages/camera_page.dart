@@ -1,17 +1,17 @@
 import 'package:attend_it/pages/approving_page.dart';
+import 'package:attend_it/provider/schedule_provider.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class CameraPage extends StatefulWidget {
-  final Map<String, dynamic> schedule;
-
-  const CameraPage({Key? key, required this.schedule}) : super(key: key);
+class CameraPage extends ConsumerStatefulWidget {
+  const CameraPage({super.key});
 
   @override
   _CameraPageState createState() => _CameraPageState();
 }
 
-class _CameraPageState extends State<CameraPage> {
+class _CameraPageState extends ConsumerState<CameraPage> {
   CameraController? _controller; // CameraController is nullable
   Future<void>? _initializeControllerFuture; // Future is nullable
 
@@ -52,60 +52,72 @@ class _CameraPageState extends State<CameraPage> {
 
   @override
   Widget build(BuildContext context) {
+    final selectedSchedule =
+        ref.watch(scheduleProvider.notifier).selectedSchedule;
+
     return Scaffold(
       appBar: AppBar(
-        title: Text('Camera for ${widget.schedule['course']}'),
+        title: Text('Camera for ${selectedSchedule?.namaMatkul}'),
         backgroundColor: const Color(0xFF0047AB),
       ),
       body: Stack(
         children: [
-          FutureBuilder<void>(
-            future: _initializeControllerFuture,
-            builder: (context, snapshot) {
-              // If the camera is initialized, display the camera preview
-              if (snapshot.connectionState == ConnectionState.done) {
-                return CameraPreview(_controller!);
-              }
+          Expanded(
+            child: FutureBuilder<void>(
+              future: _initializeControllerFuture,
+              builder: (context, snapshot) {
+                // If the camera is initialized, display the camera preview
+                if (snapshot.connectionState == ConnectionState.done) {
+                  return CameraPreview(_controller!);
+                }
 
-              // If the camera initialization failed, show an error
-              else if (snapshot.hasError) {
-                return Center(child: Text('Error: ${snapshot.error}'));
-              }
+                // If the camera initialization failed, show an error
+                else if (snapshot.hasError) {
+                  return Center(child: Text('Error: ${snapshot.error}'));
+                }
 
-              // Show a loading spinner while waiting for initialization
-              else {
-                return const Center(child: CircularProgressIndicator());
-              }
-            },
-          ),
-          Positioned(
-            bottom: 20,
-            right: 150,
-            child: FloatingActionButton(
-              onPressed: () async {
-                try {
-                  // Ensure the camera is initialized
-                  await _initializeControllerFuture;
-
-                  // Attempt to take a picture and get the file path
-                  final image = await _controller!.takePicture();
-
-                  // If the picture is taken, navigate to a new screen to display it
-                  if (mounted) {
-                    await Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => ApprovingPage(
-                          imagePath: image.path,
-                        ),
-                      ),
-                    );
-                  }
-                } catch (e) {
-                  // Log any errors
-                  print('Error capturing picture: $e');
+                // Show a loading spinner while waiting for initialization
+                else {
+                  return const Center(child: CircularProgressIndicator());
                 }
               },
-              child: const Icon(Icons.camera_alt),
+            ),
+          ),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 90),
+              child: FloatingActionButton(
+                onPressed: () async {
+                  // Logika tombol tetap sama seperti sebelumnya
+                  try {
+                    await _initializeControllerFuture;
+                    final image = await _controller!.takePicture();
+                    final selectedSchedule =
+                        ref.read(scheduleProvider.notifier).selectedSchedule;
+
+                    if (selectedSchedule != null) {
+                      if (mounted) {
+                        await Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => ApprovingPage(
+                              imagePath: image.path,
+                              selectedSchedule: selectedSchedule,
+                            ),
+                          ),
+                        );
+                      }
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('No schedule selected!')),
+                      );
+                    }
+                  } catch (e) {
+                    print('Error capturing picture: $e');
+                  }
+                },
+                child: const Icon(Icons.camera_alt),
+              ),
             ),
           ),
         ],
