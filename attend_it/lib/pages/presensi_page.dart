@@ -1,7 +1,7 @@
 import 'package:attend_it/provider/schedule_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'camera_page.dart'; // Import your CameraPage file
+import 'package:go_router/go_router.dart';
 import 'package:attend_it/widgets/appbar_user_widget.dart';
 import 'package:attend_it/widgets/bottom_nav_widget.dart';
 
@@ -49,12 +49,9 @@ class _PresensiPageState extends ConsumerState<PresensiPage> {
             child: GestureDetector(
               onTap: schedule.status == '1'
                   ? () {
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(
-                      //     builder: (context) => CameraPage(schedule: schedule),
-                      //   ),
-                      // );
+                       // Simpan jadwal yang dipilih ke provider
+                      ref.read(scheduleProvider.notifier).selectSchedule(schedule);
+                      context.go('/camera');
                     }
                   : null, // Disable tap if not active
               child: Card(
