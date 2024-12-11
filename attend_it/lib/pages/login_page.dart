@@ -161,39 +161,42 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                     ),
                     const SizedBox(height: 20),
 
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        // Login Button
-                        ElevatedButton(
-                          onPressed: _login,
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFFF2B400),
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 100, vertical: 25),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                          ),
-                          child: _isLoading
-                              ? const CircularProgressIndicator(
-                                  valueColor: AlwaysStoppedAnimation<Color>(
-                                      Colors.white),
-                                )
-                              : const Text(
-                                  'LOGIN',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold),
-                                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    // Login Button
+                    ElevatedButton(
+                      onPressed: _login,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFFF2B400),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 100, vertical: 25),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
                         ),
-                      ],
+                      ),
+                      child: _isLoading 
+                        ? const CircularProgressIndicator( 
+                            valueColor: AlwaysStoppedAnimation<Color>(Colors.white), 
+                          ) 
+                        : const Text( 
+                            'LOGIN', 
+                            style: TextStyle( 
+                              color: Colors.white, fontWeight: FontWeight.bold), 
+                          ),
                     ),
                   ],
                 ),
-              ),
-            );
-          },
+                TextButton(
+                  onPressed: () => context.go('/register'),
+                  child: const Text(
+                    'Don\'t have an account? Register',
+                    style: TextStyle(color: Color(0xFF0047AB)),
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
       ),
     );
