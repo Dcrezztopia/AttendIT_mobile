@@ -18,17 +18,18 @@ void main() {
 class MyApp extends ConsumerStatefulWidget {
   const MyApp({super.key});
 
-  @override 
+  @override
   _MyAppState createState() => _MyAppState();
 }
+
 class _MyAppState extends ConsumerState<MyApp> {
   late final GoRouter _router;
 
-  @override 
-  void initState() { 
-    super.initState(); 
-    WidgetsBinding.instance.addPostFrameCallback((_) { 
-      ref.read(authProvider.notifier).tryAutoLogin(); 
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(authProvider.notifier).tryAutoLogin();
     });
     _router = GoRouter(
       initialLocation: '/',
@@ -74,7 +75,7 @@ class _MyAppState extends ConsumerState<MyApp> {
       //   final isLoading = authState.isLoading;
       //   final isLoggingIn = state.uri.toString() == '/login';
 
-      //   if (isLoading) { 
+      //   if (isLoading) {
       //     context.go('/');
       //   }
 
@@ -90,7 +91,7 @@ class _MyAppState extends ConsumerState<MyApp> {
       // },
     );
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
