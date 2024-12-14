@@ -1,4 +1,5 @@
 import 'package:attend_it/provider/auth_provider.dart';
+import 'package:attend_it/provider/statistics_provider.dart';
 import 'package:attend_it/widgets/bottom_nav_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -23,9 +24,18 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    // Fetch statistics data when the page is initialized
+    Future.microtask(
+        () => ref.read(statisticsProvider.notifier).fetchStatistics());
+  }
+
+  @override
   Widget build(BuildContext context) {
     final authState = ref.watch(authProvider);
     final mahasiswa = authState.mahasiswa;
+    final statistics = ref.watch(statisticsProvider);
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -44,7 +54,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                 ),
               ),
             ),
-            _buildRecap(),
+            _buildRecap(statistics),
             const Center(
               child: SizedBox(
                 width: 330,
@@ -146,7 +156,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
     );
   }
 
-  Widget _buildRecap() {
+  Widget _buildRecap(Map<String, int> statistics) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
       child: Column(
@@ -155,9 +165,10 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
           const Text("Rekap",
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
           const SizedBox(height: 10),
-          _buildDataRow("ALPHA", "0"),
-          _buildDataRow("IZIN", "0"),
-          _buildDataRow("SAKIT", "12"),
+          // _buildDataRow("Hadir", statistics['hadir'].toString()),
+          _buildDataRow("Alpha", statistics['alpha'].toString()),
+          _buildDataRow("Izin", statistics['izin'].toString()),
+          _buildDataRow("Sakit", statistics['sakit'].toString()),
         ],
       ),
     );

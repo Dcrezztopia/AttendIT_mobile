@@ -1,3 +1,4 @@
+import 'package:attend_it/provider/presensi_provider.dart';
 import 'package:attend_it/widgets/appbar_user_widget.dart';
 import 'package:attend_it/widgets/bottom_nav_widget.dart';
 import 'package:flutter/material.dart';
@@ -11,11 +12,28 @@ class HistoryPage extends ConsumerStatefulWidget {
 }
 
 class _HistoryPageState extends ConsumerState<HistoryPage> {
-  String selectedMonth = 'September'; // Default selected month
+  String selectedMonth = 'Semua'; // Default selected month
   int _currentIndex = 2; // Current index for the bottom navigation bar
 
   @override
+  void initState() {
+    super.initState();
+    // Fetch presensi data when the page is initialized
+    Future.microtask(() => ref.read(presensiProvider.notifier).fetchPresensi());
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final presensiList = ref.watch(presensiProvider);
+
+    // Filter presensiList based on selectedMonth
+    final filteredPresensiList = selectedMonth == 'Semua'
+        ? presensiList
+        : presensiList.where((presensi) {
+            final month = DateTime.parse(presensi.tanggalPresensi).month;
+            return _monthToString(month) == selectedMonth;
+          }).toList();
+
     return Scaffold(
       appBar: const AppbarUserWidget(),
       body: Column(
@@ -26,7 +44,7 @@ class _HistoryPageState extends ConsumerState<HistoryPage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 const Text(
-                  'History',
+                  'Histori Presensi',
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
@@ -34,8 +52,14 @@ class _HistoryPageState extends ConsumerState<HistoryPage> {
                 ),
                 DropdownButton<String>(
                   value: selectedMonth,
-                  items: <String>['September', 'October', 'November']
-                      .map((String month) {
+                  items: <String>[
+                    'Semua',
+                    'Agustus',
+                    'September',
+                    'October',
+                    'November',
+                    'Desember'
+                  ].map((String month) {
                     return DropdownMenuItem<String>(
                       value: month,
                       child: Text(month),
@@ -51,26 +75,27 @@ class _HistoryPageState extends ConsumerState<HistoryPage> {
             ),
           ),
           Expanded(
-            child: ListView(
-              padding: const EdgeInsets.all(16.0),
-              children: [
-                _buildAttendanceCard(
-                  time: '14.30 - 17.10',
-                  course: 'Pemrograman Mobile',
-                  lecturer: 'Sofyan Noor Arief S.T., M.Kom',
-                  status: 'Terlambat',
-                  statusColor: Colors.red,
-                ),
-                const SizedBox(height: 16),
-                _buildAttendanceCard(
-                  time: '14.30 - 17.10',
-                  course: 'Metodologi Penelitian',
-                  lecturer: 'Ulla Delfina Rosiani S.T., MT., Dr',
-                  status: 'Hadir',
-                  statusColor: Colors.green,
-                ),
-              ],
-            ),
+            child: filteredPresensiList.isEmpty
+                ? const Center(child: CircularProgressIndicator())
+                : ListView.builder(
+                    padding: const EdgeInsets.all(16.0),
+                    itemCount: filteredPresensiList.length,
+                    itemBuilder: (context, index) {
+                      final presensi = filteredPresensiList[index];
+                      return _buildAttendanceCard(
+                        meetingNumber: presensi.pertemuanKe.toString(),
+                        attendTime: presensi.tanggalPresensi,
+                        courseTime:
+                            '${presensi.jadwal.waktuMulai} - ${presensi.jadwal.waktuSelesai}',
+                        course: presensi.jadwal.namaMatkul,
+                        lecturer: presensi.jadwal.namaDosen,
+                        status: presensi.statusPresensi,
+                        statusColor: presensi.statusPresensi == 'hadir'
+                            ? Colors.green
+                            : Colors.red,
+                      );
+                    },
+                  ),
           ),
         ],
       ),
@@ -85,9 +110,28 @@ class _HistoryPageState extends ConsumerState<HistoryPage> {
     );
   }
 
+  String _monthToString(int month) {
+    switch (month) {
+      case 8:
+        return 'Agustus';
+      case 9:
+        return 'September';
+      case 10:
+        return 'October';
+      case 11:
+        return 'November';
+      case 12:
+        return 'Desember';
+      default:
+        return '';
+    }
+  }
+
   // Widget for individual attendance cards
   Widget _buildAttendanceCard({
-    required String time,
+    required String meetingNumber,
+    required String attendTime,
+    required String courseTime,
     required String course,
     required String lecturer,
     required String status,
@@ -104,13 +148,20 @@ class _HistoryPageState extends ConsumerState<HistoryPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              time,
+              'Pertemuan $meetingNumber - $attendTime',
               style: const TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 16,
               ),
             ),
             const SizedBox(height: 8),
+            Text(
+              courseTime,
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+              ),
+            ),
             Text(
               course,
               style: const TextStyle(fontSize: 14),
