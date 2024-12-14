@@ -14,17 +14,19 @@ class ProfilePage extends ConsumerStatefulWidget {
 class _ProfilePageState extends ConsumerState<ProfilePage> {
   int _currentIndex = 4;
 
-  void _logout() async { 
-    final authNotifier = ref.read(authProvider.notifier); 
-    await authNotifier.logout(); 
+  void _logout() async {
+    final authNotifier = ref.read(authProvider.notifier);
+    await authNotifier.logout();
+    print('User has logged out successfully');
     // ignore: use_build_context_synchronously
-    context.go('/login'); }
+    context.go('/login');
+  }
 
   @override
   Widget build(BuildContext context) {
-    final authState = ref.watch(authProvider); 
+    final authState = ref.watch(authProvider);
     final mahasiswa = authState.mahasiswa;
-    
+
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
@@ -80,7 +82,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
   Widget _buildHeader(Map<String, dynamic>? mahasiswa) {
     return Container(
       width: double.infinity, // Menyesuaikan dengan lebar layar
-      padding: const EdgeInsets.symmetric(vertical: 30),
+      padding: const EdgeInsets.symmetric(vertical: 50),
       decoration: const BoxDecoration(
         color: Color(0xFF0C4DA2),
         borderRadius: BorderRadius.vertical(
@@ -97,7 +99,9 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
       ),
       child: Column(
         children: [
-          const SizedBox(height: 16,),
+          const SizedBox(
+            height: 16,
+          ),
           const CircleAvatar(
             radius: 50,
             backgroundImage: AssetImage('assets/images/ktm.jpeg'),
@@ -124,7 +128,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
 
   Widget _buildStudentData(Map<String, dynamic>? mahasiswa) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -132,8 +136,10 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
           const SizedBox(height: 10),
           _buildDataRow("NIM", mahasiswa != null ? mahasiswa['nim'] : 'NIM'),
-          _buildDataRow("Kelas", mahasiswa != null ? mahasiswa['nama_kelas'] : 'Kelas'),
-          _buildDataRow("Program Studi", mahasiswa != null ? mahasiswa['prodi'] : 'Program Studi'),
+          _buildDataRow(
+              "Kelas", mahasiswa != null ? mahasiswa['nama_kelas'] : 'Kelas'),
+          _buildDataRow("Program Studi",
+              mahasiswa != null ? mahasiswa['prodi'] : 'Program Studi'),
           _buildDataRow("Jurusan", "Teknologi Informasi"),
         ],
       ),
@@ -186,17 +192,24 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
           const Text("Atur Ulang Kata Sandi"),
           const SizedBox(height: 10),
           const Text("App Version", style: TextStyle(color: Colors.grey)),
-          const Text("v.2.3.0"),
+          const Text("beta"),
           const SizedBox(height: 10),
-          GestureDetector( 
-            onTap: _logout, child: 
-            const Text( 
-              'Keluar Aplikasi', 
-              style: TextStyle( 
-                color: Colors.red, 
-                fontWeight: FontWeight.bold, 
-              ), 
-            ), 
+          ElevatedButton(
+            onPressed: _logout,
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.red, // Background color
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+            child: const Text(
+              'Logout',
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
           ),
         ],
       ),

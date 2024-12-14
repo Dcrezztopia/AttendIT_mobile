@@ -121,18 +121,30 @@ class AuthNotifier extends StateNotifier<AuthState> {
         state = state.copyWith(isLoading: false);
         return;
       }
-      print('Token found: $token');
-      // state = state.copyWith(isAuthenticated: true, token: token, isLoading: true);
 
-      // Fetch user profile
-      await getProfile(token);
-      // state = state.copyWith(isAuthenticated: true, token: token, isLoading: false);
+      print('Token found: $token');
+
+      // Verify token validity
+      final response = await http.get(
+        Uri.parse('$baseUrl/profile'),
+        headers: {
+          'Authorization': 'Bearer $token',
+        },
+      ).timeout(const Duration(seconds: 5));
+
+      if (response.statusCode == 200) {
+        await getProfile(token);
+      } else {
+        // Token is invalid, clear it
+        await _storageService.deleteToken();
+        state = AuthState.initial();
+        print('Token is invalid, user needs to log in again');
+      }
     } catch (e) {
       state = AuthState.initial();
       print('Error in tryAutoLogin: $e');
-      state =
-          state.copyWith(isLoading: false); // Reset state loading saat error
-      rethrow;
+    } finally {
+      state = state.copyWith(isLoading: false);
     }
   }
 
@@ -149,8 +161,8 @@ class AuthNotifier extends StateNotifier<AuthState> {
         final user = data['user'];
         final mahasiswa = data['mahasiswa'];
 
-        print('User: $user');
-        print('Mahasiswa: $mahasiswa'); // Debug statement
+        // print('User: $user');
+        // print('Mahasiswa: $mahasiswa'); // Debug statement
 
         state = state.copyWith(
             isAuthenticated: true,
@@ -180,8 +192,8 @@ class AuthNotifier extends StateNotifier<AuthState> {
   }) async {
     state = state.copyWith(isLoading: true);
     try {
-      print(
-          'Registering user with email: $email, username: $username, password: $password, nim: $nim, namaMahasiswa: $namaMahasiswa, prodi: $prodi, idKelas: $idKelas');
+      // print(
+      //     'Registering user with email: $email, username: $username, password: $password, nim: $nim, namaMahasiswa: $namaMahasiswa, prodi: $prodi, idKelas: $idKelas');
       final response = await http.post(
         Uri.parse('$baseUrl/register'),
         headers: {'Content-Type': 'application/json; charset=UTF-8'},

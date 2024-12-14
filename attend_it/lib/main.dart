@@ -4,7 +4,7 @@ import 'package:attend_it/pages/home_page.dart';
 import 'package:attend_it/pages/login_page.dart';
 import 'package:attend_it/pages/presensi_page.dart';
 import 'package:attend_it/pages/profile_page.dart';
-import 'package:attend_it/pages/schedule_page.dart';
+import 'package:attend_it/pages/portal_page.dart';
 import 'package:attend_it/pages/register_page.dart';
 import 'package:attend_it/splash_screen.dart';
 import 'package:flutter/material.dart';
@@ -56,8 +56,8 @@ class _MyAppState extends ConsumerState<MyApp> {
           builder: (context, state) => const HistoryPage(),
         ),
         GoRoute(
-          path: '/schedule',
-          builder: (context, state) => const SchedulePage(),
+          path: '/portal',
+          builder: (context, state) => const PortalPage(),
         ),
         GoRoute(
           path: '/profile',
@@ -103,6 +103,9 @@ class _MyAppState extends ConsumerState<MyApp> {
       title: 'Attend IT',
       theme: ThemeData(
         primarySwatch: Colors.blue,
+        textTheme: ThemeData.light().textTheme.apply(
+              fontFamily: 'Poppins',
+            ),
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       routerConfig: _router,
