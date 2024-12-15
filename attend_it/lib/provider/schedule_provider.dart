@@ -27,12 +27,12 @@ class ScheduleNotifier extends StateNotifier<List<Schedule>> {
         },
       );
       if (response.statusCode == 200) {
-        print('Respon API: ${response.body}');
+        // print('Respon API: ${response.body}');
         Map<String, dynamic> data = json.decode(response.body);
         // Pastikan key `jadwals` ada
         if (data.containsKey('jadwals')) {
           List<dynamic> jadwals = data['jadwals'];
-          print('Data jadwal: $data');
+          // print('Data jadwal: $data');
           state = jadwals.map((json) => Schedule.fromJson(json)).toList();
         } else {
           print('Key "jadwals" tidak ditemukan dalam respons.');

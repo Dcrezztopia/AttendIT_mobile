@@ -7,7 +7,7 @@ class BottomNavBarWidget extends StatelessWidget {
   final Function(int) onTap;
 
   const BottomNavBarWidget({
-    super.key, 
+    super.key,
     required this.currentIndex,
     required this.onTap,
   });
@@ -30,7 +30,7 @@ class BottomNavBarWidget extends StatelessWidget {
           context.go('/histori'); // Navigasi ke halaman Histori
         }
         if (index == 3) {
-          context.go('/schedule'); // Navigasi ke halaman Schedule
+          context.go('/portal'); // Navigasi ke halaman Schedule
         }
         if (index == 4) {
           context.go('/profile'); // Navigasi ke halaman Profile
@@ -38,12 +38,16 @@ class BottomNavBarWidget extends StatelessWidget {
         onTap(index); // Tetap panggil fungsi onTap eksternal
       },
       items: const [
-        BottomNavigationBarItem(icon: Icon(IconsaxPlusLinear.home_2), label: 'Home'),
-        BottomNavigationBarItem(icon: Icon(IconsaxPlusLinear.tick_square), label: 'Presensi'),
-        BottomNavigationBarItem(icon: Icon(IconsaxPlusLinear.stickynote), label: 'Histori'),
         BottomNavigationBarItem(
-            icon: Icon(IconsaxPlusLinear.calendar), label: 'schedule'),
-        BottomNavigationBarItem(icon: Icon(IconsaxPlusLinear.user_square), label: 'profile'),
+            icon: Icon(IconsaxPlusLinear.home_2), label: 'Home'),
+        BottomNavigationBarItem(
+            icon: Icon(IconsaxPlusLinear.tick_square), label: 'Presensi'),
+        BottomNavigationBarItem(
+            icon: Icon(IconsaxPlusLinear.stickynote), label: 'Histori'),
+        BottomNavigationBarItem(
+            icon: Icon(IconsaxPlusLinear.link_square), label: 'Portal'),
+        BottomNavigationBarItem(
+            icon: Icon(IconsaxPlusLinear.user_square), label: 'Profile'),
       ],
     );
   }

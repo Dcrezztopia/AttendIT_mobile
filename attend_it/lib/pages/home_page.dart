@@ -18,8 +18,8 @@ class _HomePageState extends ConsumerState<HomePage> {
   @override
   Widget build(BuildContext context) {
     final authState = ref.watch(authProvider);
-    print('HomePage: Mahasiswa = ${authState.mahasiswa}');
-    
+    // print('HomePage: Mahasiswa = ${authState.mahasiswa}');
+
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -32,24 +32,23 @@ class _HomePageState extends ConsumerState<HomePage> {
               const Text(
                 'Selamat Datang,',
                 style: TextStyle(
-                  fontFamily: 'Poppins',
-                  fontSize: 30,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF0047AB)
-                ),
+                    fontFamily: 'Poppins',
+                    fontSize: 30,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF0047AB)),
               ),
               Text(
-                authState.mahasiswa != null 
-                  ? authState.mahasiswa!['nama_mahasiswa'] 
-                  : 'Pengguna',
+                authState.mahasiswa != null
+                    ? authState.mahasiswa!['nama_mahasiswa']
+                    : 'Pengguna',
                 style: const TextStyle(
-                  fontFamily: 'Poppins',
-                  fontSize: 25,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF0047AB)
-                ),
+                    fontFamily: 'Poppins',
+                    fontSize: 25,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF0047AB)),
               ),
               const SizedBox(height: 60),
+
               /// FAST MENU IN HOMEPAGE
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -65,12 +64,15 @@ class _HomePageState extends ConsumerState<HomePage> {
                             height: 90,
                             child: Image.asset('assets/images/jadwalHome.png'),
                           ),
-                          'Lihat Jadwal',
+                          'Portal Akademik',
                           Colors.white,
                           isGradient: true,
-                          gradientColors: [Colors.green[800]!, Colors.green[300]!],
+                          gradientColors: [
+                            Colors.green[800]!,
+                            Colors.green[300]!
+                          ],
                           onTap: () {
-                            context.go('/schedule');
+                            context.go('/portal');
                           },
                         ),
                         const SizedBox(height: 32), // Jarak antar item
@@ -83,7 +85,10 @@ class _HomePageState extends ConsumerState<HomePage> {
                           'History',
                           Colors.white,
                           isGradient: true,
-                          gradientColors: [Colors.blue[800]!, Colors.blue[300]!],
+                          gradientColors: [
+                            Colors.blue[800]!,
+                            Colors.blue[300]!
+                          ],
                           onTap: () {
                             context.go('/histori');
                           },
@@ -92,7 +97,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                     ),
                   ),
                   const SizedBox(width: 16), // Jarak antar kolom
-              
+
                   // Kolom kedua: Presensi dan Profile
                   Expanded(
                     child: Column(
@@ -104,7 +109,8 @@ class _HomePageState extends ConsumerState<HomePage> {
                           SizedBox(
                             width: 100,
                             height: 100,
-                            child: Image.asset('assets/images/presensiHome.png'),
+                            child:
+                                Image.asset('assets/images/presensiHome.png'),
                           ),
                           'Presensi',
                           Colors.white,
@@ -127,7 +133,10 @@ class _HomePageState extends ConsumerState<HomePage> {
                           'Profile',
                           Colors.white,
                           isGradient: true,
-                          gradientColors: [Colors.orange[800]!, Colors.orange[300]!],
+                          gradientColors: [
+                            Colors.orange[800]!,
+                            Colors.orange[300]!
+                          ],
                           onTap: () {
                             context.go('/profile');
                           },
@@ -164,12 +173,13 @@ class _HomePageState extends ConsumerState<HomePage> {
   }
 
   Widget _buildMenuItem(
-    Widget icon, 
-    String title, 
-    Color color, 
-    {bool isGradient = false, 
-    List<Color>? gradientColors, 
-    VoidCallback? onTap,}) {
+    Widget icon,
+    String title,
+    Color color, {
+    bool isGradient = false,
+    List<Color>? gradientColors,
+    VoidCallback? onTap,
+  }) {
     return GestureDetector(
       onTap: onTap,
       child: SizedBox(
@@ -197,11 +207,10 @@ class _HomePageState extends ConsumerState<HomePage> {
               Text(
                 title,
                 style: const TextStyle(
-                  fontFamily: 'Poppins',
-                  fontSize: 18, 
-                  fontWeight: FontWeight.bold, 
-                  color: Colors.white
-                ),
+                    fontFamily: 'Poppins',
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white),
               ),
             ],
           ),

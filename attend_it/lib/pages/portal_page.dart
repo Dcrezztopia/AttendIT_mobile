@@ -4,14 +4,14 @@ import 'package:url_launcher/url_launcher.dart';
 import '../widgets/appbar_user_widget.dart';
 import '../widgets/bottom_nav_widget.dart';
 
-class SchedulePage extends ConsumerStatefulWidget {
-  const SchedulePage({super.key});
+class PortalPage extends ConsumerStatefulWidget {
+  const PortalPage({super.key});
 
   @override
-  _SchedulePageState createState() => _SchedulePageState();
+  PortalPageState createState() => PortalPageState();
 }
 
-class _SchedulePageState extends ConsumerState<SchedulePage> {
+class PortalPageState extends ConsumerState<PortalPage> {
   int _currentIndex = 3;
 
   @override
