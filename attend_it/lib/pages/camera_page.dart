@@ -3,6 +3,9 @@ import 'package:attend_it/provider/schedule_provider.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'dart:io';
+import 'package:attend_it/widgets/identity_confirmation_dialog.dart';
+import 'package:go_router/go_router.dart';
 
 class CameraPage extends ConsumerStatefulWidget {
   const CameraPage({super.key});
@@ -12,16 +15,15 @@ class CameraPage extends ConsumerStatefulWidget {
 }
 
 class _CameraPageState extends ConsumerState<CameraPage> {
-  CameraController? _controller; // CameraController is nullable
-  Future<void>? _initializeControllerFuture; // Future is nullable
+  CameraController? _controller;
+  Future<void>? _initializeControllerFuture;
 
   @override
   void initState() {
     super.initState();
-    _initializeCamera(); // Initialize the camera when the page loads
+    _initializeCamera();
   }
 
-  // Initialize the camera
   Future<void> _initializeCamera() async {
     final cameras = await availableCameras();
 
@@ -30,23 +32,17 @@ class _CameraPageState extends ConsumerState<CameraPage> {
           'No camera available', 'There are no cameras on this device');
     }
 
-    // Filter to find the front camera
     final frontCamera = cameras.firstWhere(
       (camera) => camera.lensDirection == CameraLensDirection.front,
-      orElse: () => cameras
-          .first, // Fallback to the first camera if no front camera is available
+      orElse: () => cameras.first,
     );
 
-    // Initialize the CameraController with the selected camera
     _controller = CameraController(
-      frontCamera, // Use the front-facing camera
+      frontCamera,
       ResolutionPreset.medium,
     );
 
-    // Initialize the controller and set the future
     _initializeControllerFuture = _controller!.initialize();
-
-    // Ensure the widget rebuilds once the initialization is complete
     setState(() {});
   }
 
@@ -57,31 +53,27 @@ class _CameraPageState extends ConsumerState<CameraPage> {
 
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () => context.go('/presensi'),
+        ),
         title: Text('Camera for ${selectedSchedule?.namaMatkul}'),
         backgroundColor: const Color(0xFF0047AB),
+        foregroundColor: Colors.white,
       ),
       body: Stack(
         children: [
-          Expanded(
-            child: FutureBuilder<void>(
-              future: _initializeControllerFuture,
-              builder: (context, snapshot) {
-                // If the camera is initialized, display the camera preview
-                if (snapshot.connectionState == ConnectionState.done) {
-                  return CameraPreview(_controller!);
-                }
-
-                // If the camera initialization failed, show an error
-                else if (snapshot.hasError) {
-                  return Center(child: Text('Error: ${snapshot.error}'));
-                }
-
-                // Show a loading spinner while waiting for initialization
-                else {
-                  return const Center(child: CircularProgressIndicator());
-                }
-              },
-            ),
+          FutureBuilder<void>(
+            future: _initializeControllerFuture,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.done) {
+                return CameraPreview(_controller!);
+              } else if (snapshot.hasError) {
+                return Center(child: Text('Error: ${snapshot.error}'));
+              } else {
+                return const Center(child: CircularProgressIndicator());
+              }
+            },
           ),
           Align(
             alignment: Alignment.bottomCenter,
@@ -89,31 +81,45 @@ class _CameraPageState extends ConsumerState<CameraPage> {
               padding: const EdgeInsets.only(bottom: 90),
               child: FloatingActionButton(
                 onPressed: () async {
-                  // Logika tombol tetap sama seperti sebelumnya
                   try {
                     await _initializeControllerFuture;
                     final image = await _controller!.takePicture();
                     final selectedSchedule =
                         ref.read(scheduleProvider.notifier).selectedSchedule;
 
-                    if (selectedSchedule != null) {
-                      if (mounted) {
-                        await Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => ApprovingPage(
-                              imagePath: image.path,
-                              selectedSchedule: selectedSchedule,
-                            ),
-                          ),
-                        );
-                      }
-                    } else {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('No schedule selected!')),
+                    if (mounted) {
+                      showDialog(
+                        context: context,
+                        barrierDismissible: false,
+                        builder: (BuildContext context) {
+                          return IdentityConfirmationDialog(
+                            predictedName: "John Doe", // Hardcoded for testing
+                            confidence: 0.95, // Hardcoded for testing
+                            onConfirm: () {
+                              Navigator.of(context).pop(); // Close dialog
+                              if (selectedSchedule != null) {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) => ApprovingPage(
+                                      imagePath: image.path,
+                                      selectedSchedule: selectedSchedule,
+                                    ),
+                                  ),
+                                );
+                              }
+                            },
+                            onRetake: () {
+                              Navigator.of(context).pop(); // Close dialog
+                            },
+                          );
+                        },
                       );
                     }
                   } catch (e) {
                     print('Error capturing picture: $e');
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Error: $e')),
+                    );
                   }
                 },
                 child: const Icon(Icons.camera_alt),
@@ -127,7 +133,6 @@ class _CameraPageState extends ConsumerState<CameraPage> {
 
   @override
   void dispose() {
-    // Dispose of the controller to free up resources
     _controller?.dispose();
     super.dispose();
   }

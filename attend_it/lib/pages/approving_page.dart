@@ -24,6 +24,7 @@ class _ApprovingPageState extends State<ApprovingPage> {
       appBar: AppBar(
         title: const Text('Captured Picture'),
         backgroundColor: const Color(0xFF0047AB),
+        foregroundColor: Colors.white,
       ),
       body: SafeArea(
         child: SingleChildScrollView(
