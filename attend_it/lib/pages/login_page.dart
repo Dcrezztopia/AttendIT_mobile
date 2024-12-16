@@ -1,4 +1,3 @@
-import 'package:attend_it/pages/home_page.dart';
 import 'package:attend_it/provider/auth_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

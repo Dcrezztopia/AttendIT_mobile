@@ -72,7 +72,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                             Colors.green[300]!
                           ],
                           onTap: () {
-                            context.go('/portal');
+                            context.go('/home/portal');
                           },
                         ),
                         const SizedBox(height: 32), // Jarak antar item
@@ -90,7 +90,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                             Colors.blue[300]!
                           ],
                           onTap: () {
-                            context.go('/histori');
+                            context.go('/home/histori');
                           },
                         ),
                       ],
@@ -120,7 +120,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                             const Color(0xFFDBB0FD),
                           ],
                           onTap: () {
-                            context.go('/presensi');
+                            context.go('/home/presensi');
                           },
                         ),
                         const SizedBox(height: 32), // Jarak antar item
@@ -138,7 +138,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                             Colors.orange[300]!
                           ],
                           onTap: () {
-                            context.go('/profile');
+                            context.go('/home/profile');
                           },
                         ),
                       ],

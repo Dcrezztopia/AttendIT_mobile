@@ -1,8 +1,12 @@
+import 'dart:io';
 import 'dart:convert';
 import 'package:attend_it/services/api_config.dart';
 import 'package:attend_it/services/secure_storage_service.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
+import 'package:http_parser/http_parser.dart';
+import 'package:mime/mime.dart';
+
 // import 'package:shared_preferences/shared_preferences.dart';
 
 /// Provider for managing authentication state.
@@ -92,7 +96,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
       }
     } catch (e) {
       state = AuthState.initial(); // Reset state on error
-      print('Error in login: $e');
+      // print('Error in login: $e');
       rethrow;
     }
   }
@@ -142,7 +146,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
       }
     } catch (e) {
       state = AuthState.initial();
-      print('Error in tryAutoLogin: $e');
+      // print('Error in tryAutoLogin: $e');
     } finally {
       state = state.copyWith(isLoading: false);
     }
@@ -176,7 +180,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
       }
     } catch (e) {
       state = AuthState.initial();
-      print('Error in getProfile: $e');
+      // print('Error in getProfile: $e');
       rethrow;
     }
   }
@@ -189,49 +193,58 @@ class AuthNotifier extends StateNotifier<AuthState> {
     required String namaMahasiswa,
     required String prodi,
     required String idKelas,
+    File? foto,
   }) async {
     state = state.copyWith(isLoading: true);
     try {
-      // print(
-      //     'Registering user with email: $email, username: $username, password: $password, nim: $nim, namaMahasiswa: $namaMahasiswa, prodi: $prodi, idKelas: $idKelas');
-      final response = await http.post(
-        Uri.parse('$baseUrl/register'),
-        headers: {'Content-Type': 'application/json; charset=UTF-8'},
-        body: jsonEncode({
-          'email': email,
-          'username': username,
-          'password': password,
-          'role': 'mahasiswa',
-          'nim': nim,
-          'nama_mahasiswa': namaMahasiswa,
-          'prodi': prodi,
-          'id_kelas': idKelas,
-        }),
-      );
+      var uri = Uri.parse('$baseUrl/register');
+      var request = http.MultipartRequest('POST', uri);
+
+      // Add headers
+      request.headers.addAll({
+        'Accept': 'application/json',
+      });
+
+      // Add text fields
+      request.fields.addAll({
+        'email': email,
+        'username': username,
+        'password': password,
+        'role': 'mahasiswa',
+        'nim': nim,
+        'nama_mahasiswa': namaMahasiswa,
+        'prodi': prodi,
+        'id_kelas': idKelas,
+      });
+
+      if (foto != null) {
+        final mimeType = lookupMimeType(foto.path);
+        request.files.add(await http.MultipartFile.fromPath(
+          'foto',
+          foto.path,
+          contentType: mimeType != null
+              ? MediaType.parse(mimeType)
+              : MediaType('image', 'jpeg'),
+        ));
+      }
+
+      final streamedResponse = await request.send();
+      final response = await http.Response.fromStream(streamedResponse);
 
       if (response.statusCode == 201) {
-        final data = jsonDecode(response.body);
-        final token = data['token'];
-        final user = data['user'];
-
-        // Simpan token (opsional, tergantung flow aplikasi)
-        await _storageService.writeToken(token);
-
-        state = state.copyWith(
-          isLoading: false,
-          isAuthenticated: true, // Opsional, tergantung flow aplikasi
-          token: token,
-          user: user,
-        );
+        final responseData = jsonDecode(response.body);
+        if (responseData['message'] == 'User registered successfully') {
+          state = state.copyWith(isLoading: false);
+        } else {
+          throw Exception('Registration failed: ${responseData['message']}');
+        }
       } else {
         throw Exception(
-            jsonDecode(response.body)['message'] ?? 'Registrasi gagal');
+            'Registration failed: ${response.statusCode} - ${response.body}');
       }
     } catch (e) {
-      print('Error in register: $e');
-      rethrow;
-    } finally {
       state = state.copyWith(isLoading: false);
+      rethrow;
     }
   }
 }
