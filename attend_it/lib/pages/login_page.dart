@@ -22,21 +22,19 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     });
   }
 
-  // Handle login action
   void _login() async {
     final username = _usernameController.text.trim();
     final password = _passwordController.text.trim();
 
     if (username.isEmpty || password.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-            content: Text('Please enter both username and password.')),
+        const SnackBar(content: Text('Please enter both username and password.')),
       );
       return;
     }
 
     setState(() {
-      _isLoading = true; // Show loading indicator
+      _isLoading = true;
     });
 
     try {
@@ -49,7 +47,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
       );
     } finally {
       setState(() {
-        _isLoading = false; // Hide loading indicator
+        _isLoading = false;
       });
     }
   }
@@ -59,138 +57,140 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
-        child: LayoutBuilder(
-          builder: (context, constraints) {
-            return SingleChildScrollView(
-              padding: EdgeInsets.fromLTRB(
-                32.0,
-                32.0,
-                32.0,
-                MediaQuery.of(context).viewInsets.bottom + 32.0,
-              ),
-              child: ConstrainedBox(
-                constraints: BoxConstraints(
-                  minHeight:
-                      constraints.maxHeight - 64.0, // Account for padding
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(32.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const SizedBox(height: 50),
+                // Logo
+                Image.asset(
+                  'assets/images/logo_jti.jpg',
+                  height: 200,
                 ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    // Logo
-                    Image.asset(
-                      'assets/images/logo_jti.jpg',
-                      height: 200,
-                    ),
-                    const SizedBox(height: 20),
+                const SizedBox(height: 30),
 
-                    // Title
-                    const Text(
-                      'Presensi Online',
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontSize: 25,
-                        fontWeight: FontWeight.w600,
-                        color: Color(0xFF0047AB),
-                      ),
-                    ),
-                    const Text(
-                      'JTI Polinema',
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontSize: 20,
-                        fontWeight: FontWeight.w600,
-                        color: Color(0xFF0047AB),
-                      ),
-                    ),
-                    const SizedBox(height: 30),
+                // Title with modern typography
+                const Text(
+                  'Presensi Online',
+                  style: TextStyle(
+                    fontSize: 28,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF0047AB),
+                    fontFamily: 'Poppins',
+                  ),
+                ),
+                const Text(
+                  'JTI Polinema',
+                  style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.w500,
+                    color: Color(0xFF0047AB),
+                    fontFamily: 'Poppins',
+                  ),
+                ),
+                const SizedBox(height: 40),
 
-                    // username Input
-                    TextFormField(
-                      controller: _usernameController,
-                      decoration: InputDecoration(
-                        hintText: 'Username',
-                        hintStyle: TextStyle(color: Colors.grey.shade400),
-                        filled: true,
-                        fillColor: const Color(0xFFF3F4F6),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: BorderSide.none,
-                        ),
+                // Username Input with modern design
+                Container(
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFF3F4F6),
+                    borderRadius: BorderRadius.circular(15),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.1),
+                        blurRadius: 10,
+                        offset: const Offset(0, 2),
                       ),
+                    ],
+                  ),
+                  child: TextFormField(
+                    controller: _usernameController,
+                    decoration: InputDecoration(
+                      hintText: 'Username',
+                      hintStyle: TextStyle(color: Colors.grey.shade400),
+                      prefixIcon: const Icon(Icons.person_outline, color: Color(0xFF0047AB)),
+                      border: InputBorder.none,
+                      contentPadding: const EdgeInsets.all(20),
                     ),
-                    const SizedBox(height: 20),
+                  ),
+                ),
+                const SizedBox(height: 20),
 
-                    // Password Input with Toggle Visibility
-                    TextFormField(
-                      controller: _passwordController,
-                      obscureText: _isObscured,
-                      decoration: InputDecoration(
-                        hintText: 'Password',
-                        hintStyle: TextStyle(color: Colors.grey.shade400),
-                        filled: true,
-                        fillColor: const Color(0xFFF3F4F6),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: BorderSide.none,
-                        ),
-                        suffixIcon: IconButton(
-                          icon: Icon(_isObscured
-                              ? Icons.visibility_off
-                              : Icons.visibility),
-                          onPressed: _togglePasswordView,
-                        ),
+                // Password Input with modern design
+                Container(
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFF3F4F6),
+                    borderRadius: BorderRadius.circular(15),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.1),
+                        blurRadius: 10,
+                        offset: const Offset(0, 2),
                       ),
-                    ),
-                    const SizedBox(height: 10),
-
-                    // Remember Me Checkbox
-                    Row(
-                      children: [
-                        Checkbox(
-                          value: false,
-                          onChanged: (bool? value) {
-                            // Handle checkbox change
-                          },
+                    ],
+                  ),
+                  child: TextFormField(
+                    controller: _passwordController,
+                    obscureText: _isObscured,
+                    decoration: InputDecoration(
+                      hintText: 'Password',
+                      hintStyle: TextStyle(color: Colors.grey.shade400),
+                      prefixIcon: const Icon(Icons.lock_outline, color: Color(0xFF0047AB)),
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          _isObscured ? Icons.visibility_off : Icons.visibility,
+                          color: const Color(0xFF0047AB),
                         ),
-                        const Text(
-                          'Ingat Password',
-                          style: TextStyle(color: Colors.grey),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 20),
-
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    // Login Button
-                    ElevatedButton(
-                      onPressed: _login,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFFF2B400),
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 100, vertical: 25),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
-                        ),
+                        onPressed: _togglePasswordView,
                       ),
-                      child: _isLoading 
-                        ? const CircularProgressIndicator( 
-                            valueColor: AlwaysStoppedAnimation<Color>(Colors.white), 
-                          ) 
-                        : const Text( 
-                            'LOGIN', 
-                            style: TextStyle( 
-                              color: Colors.white, fontWeight: FontWeight.bold), 
+                      border: InputBorder.none,
+                      contentPadding: const EdgeInsets.all(20),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 40),
+
+                // Login Button with gradient
+                SizedBox(
+                  width: double.infinity,
+                  height: 55,
+                  child: ElevatedButton(
+                    onPressed: _isLoading ? null : _login,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFFF2B400),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      elevation: 5,
+                    ),
+                    child: _isLoading
+                        ? const CircularProgressIndicator(
+                            valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                          )
+                        : const Text(
+                            'LOGIN',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
                           ),
-                    ),
-                  ],
+                  ),
                 ),
+                const SizedBox(height: 20),
+
+                // Register Link with modern style
                 TextButton(
                   onPressed: () => context.go('/register'),
                   child: const Text(
                     'Don\'t have an account? Register',
-                    style: TextStyle(color: Color(0xFF0047AB)),
+                    style: TextStyle(
+                      color: Color(0xFF0047AB),
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
                 ),
               ],
