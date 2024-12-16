@@ -4,6 +4,7 @@ import 'package:attend_it/widgets/bottom_nav_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:attend_it/services/api_config.dart';
 
 class ProfilePage extends ConsumerStatefulWidget {
   const ProfilePage({super.key});
@@ -112,15 +113,30 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
           const SizedBox(
             height: 16,
           ),
-          const CircleAvatar(
+          CircleAvatar(
             radius: 50,
-            backgroundImage: AssetImage('assets/images/ktm.jpeg'),
+            backgroundImage: mahasiswa?['foto_url'] != null
+                ? NetworkImage(getImageUrl(mahasiswa!['foto_url']))
+                    as ImageProvider<Object>
+                : const AssetImage('assets/images/ktm.jpeg'),
+            onBackgroundImageError: (exception, stackTrace) {
+              // Fallback to default image on error
+              setState(() {
+                mahasiswa?['foto_url'] = null;
+              });
+            },
           ),
           const SizedBox(height: 15),
           Text(
             mahasiswa != null ? mahasiswa['nama_mahasiswa'] : 'Nama Mahasiswa',
             style: const TextStyle(
-                fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            textAlign: TextAlign.start,
           ),
           Text(
             mahasiswa != null ? mahasiswa['nim'] : 'NIM',
@@ -200,7 +216,12 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
           const Text("Pengaturan",
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
           const SizedBox(height: 10),
-          const Text("Atur Ulang Kata Sandi"),
+          GestureDetector(
+            onTap: () {
+              context.go('/home/profile/reset-password');
+            },
+            child: const Text("Atur Ulang Kata Sandi"),
+          ),
           const SizedBox(height: 10),
           const Text("App Version", style: TextStyle(color: Colors.grey)),
           const Text("beta"),

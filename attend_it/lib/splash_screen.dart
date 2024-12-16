@@ -1,5 +1,4 @@
 import 'dart:async'; // For Future.delayed
-import 'package:attend_it/pages/login_page.dart';
 import 'package:attend_it/provider/auth_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

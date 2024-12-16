@@ -47,6 +47,7 @@ dependencies:
   http: ^1.2.2
   go_router: ^14.6.2
   flutter_secure_storage: ^9.2.2
+  image_picker: ^1.1.2
 
   # flutter_launcher_icons: latest
   # flutter_icons:
