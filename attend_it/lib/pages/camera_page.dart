@@ -6,6 +6,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'dart:io';
 import 'package:attend_it/widgets/identity_confirmation_dialog.dart';
 import 'package:go_router/go_router.dart';
+import 'package:attend_it/provider/faceRecognition_provider.dart';
+// import 'package:attend_it/provider/student_mapping_provider.dart';
 
 class CameraPage extends ConsumerStatefulWidget {
   const CameraPage({super.key});
@@ -17,6 +19,7 @@ class CameraPage extends ConsumerStatefulWidget {
 class _CameraPageState extends ConsumerState<CameraPage> {
   CameraController? _controller;
   Future<void>? _initializeControllerFuture;
+  bool _isTakingPicture = false;
 
   @override
   void initState() {
@@ -81,11 +84,19 @@ class _CameraPageState extends ConsumerState<CameraPage> {
               padding: const EdgeInsets.only(bottom: 90),
               child: FloatingActionButton(
                 onPressed: () async {
+                  if (_isTakingPicture) return; // Prevent multiple captures
+                  setState(() => _isTakingPicture = true);
                   try {
                     await _initializeControllerFuture;
                     final image = await _controller!.takePicture();
                     final selectedSchedule =
                         ref.read(scheduleProvider.notifier).selectedSchedule;
+
+                    // Process image through face recognition
+                    final faceRecognitionService =
+                        ref.read(faceRecognitionProvider);
+                    final result =
+                        await faceRecognitionService.processImage(image.path);
 
                     if (mounted) {
                       showDialog(
@@ -93,10 +104,10 @@ class _CameraPageState extends ConsumerState<CameraPage> {
                         barrierDismissible: false,
                         builder: (BuildContext context) {
                           return IdentityConfirmationDialog(
-                            predictedName: "John Doe", // Hardcoded for testing
-                            confidence: 0.95, // Hardcoded for testing
+                            predictedName: result['predicted_name'],
+                            confidence: result['confidence'],
                             onConfirm: () {
-                              Navigator.of(context).pop(); // Close dialog
+                              Navigator.of(context).pop();
                               if (selectedSchedule != null) {
                                 Navigator.of(context).push(
                                   MaterialPageRoute(
@@ -109,7 +120,7 @@ class _CameraPageState extends ConsumerState<CameraPage> {
                               }
                             },
                             onRetake: () {
-                              Navigator.of(context).pop(); // Close dialog
+                              Navigator.of(context).pop();
                             },
                           );
                         },
@@ -117,9 +128,8 @@ class _CameraPageState extends ConsumerState<CameraPage> {
                     }
                   } catch (e) {
                     print('Error capturing picture: $e');
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Error: $e')),
-                    );
+                  } finally {
+                    setState(() => _isTakingPicture = false);
                   }
                 },
                 child: const Icon(Icons.camera_alt),

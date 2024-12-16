@@ -1,18 +1,10 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../services/face_recognition_service.dart';
 
 final faceRecognitionProvider = Provider<FaceRecognitionService>((ref) {
-  return FaceRecognitionService();
+  final service = FaceRecognitionService();
+  service.loadModel(); // Pre-load the model
+  return service;
 });
 
-class FaceRecognitionService {
-  Future<String> getPredictedName(Map<String, dynamic> prediction) async {
-    // Proses prediksi untuk nama
-    return prediction['predicted_name'] ?? 'Unknown';
-  }
-
-  Future<double> getConfidence(Map<String, dynamic> prediction) async {
-    // Proses prediksi untuk tingkat kepercayaan
-    return prediction['confidence'] ?? 0.0;
-  }
-}
+  processImage(String path) {}
