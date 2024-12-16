@@ -54,94 +54,108 @@ class _PresensiPageState extends ConsumerState<PresensiPage> {
                       context.go('/camera');
                     }
                   : null, // Disable tap if not active
-              child: Card(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                elevation: schedule.status == '1' ? 4 : 0, // No elevation for inactive
-                color: schedule.status == '1'
-                    ? Colors.white
-                    : Colors.grey[300], // White for active, grey for inactive
-                shadowColor: schedule.status == '1'
-                    ? const Color.fromARGB(255, 31, 30, 30).withOpacity(0.3)
-                    : null,
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // Row for Time and Day
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            children: [
-                              const Icon(Icons.access_time,
-                                  color: Color(0xFF0047AB)),
-                              const SizedBox(width: 6),
-                              Text(
-                                '${schedule.waktuMulai} - ${schedule.waktuSelesai}',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                                  color: schedule.status == '1'
-                                      ? Colors.black
-                                      : Colors.grey[600],
-                                ),
-                              ),
-                            ],
-                          ),
-                          Text(
-                            schedule.hari, // Display the "day" text
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
-                              color: schedule.status == '1' ? Colors.black : Colors.grey[600],
-                            ),
-                          ),
-                        ],
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  return Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    elevation: schedule.status == '1' ? 4 : 0,
+                    color: schedule.status == '1' ? Colors.white : Colors.grey[300],
+                    shadowColor: schedule.status == '1'
+                        ? const Color.fromARGB(255, 31, 30, 30).withOpacity(0.3)
+                        : null,
+                    child: Container(
+                      constraints: BoxConstraints(
+                        maxWidth: constraints.maxWidth,
                       ),
-                      const Divider(color: Colors.grey),
-                      Text(
-                        schedule.namaMatkul,
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                          color: schedule.status == '1' ? Colors.black : Colors.grey[600],
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            // Row for Time and Day
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Row(
+                                  children: [
+                                    const Icon(Icons.access_time,
+                                        color: Color(0xFF0047AB)),
+                                    const SizedBox(width: 6),
+                                    Text(
+                                      '${schedule.waktuMulai} - ${schedule.waktuSelesai}',
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.bold,
+                                        color: schedule.status == '1'
+                                            ? Colors.black
+                                            : Colors.grey[600],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                Text(
+                                  schedule.hari, // Display the "day" text
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.bold,
+                                    color: schedule.status == '1' ? Colors.black : Colors.grey[600],
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const Divider(color: Colors.grey),
+                            Text(
+                              schedule.namaMatkul,
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                                color: schedule.status == '1' ? Colors.black : Colors.grey[600],
+                              ),
+                            ),
+                            const SizedBox(height: 7),
+                            Row(
+                              children: [
+                                const Icon(Icons.person, color: Color(0xFF0047AB)),
+                                const SizedBox(width: 7),
+                                Expanded(
+                                  child: Text(
+                                    schedule.namaDosen,
+                                    style: TextStyle(
+                                      fontSize: 13,
+                                      color: schedule.status == '1' ? Colors.black : Colors.grey[600],
+                                      fontFamily: 'Poppins',
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 2,
+                                    softWrap: true,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 7),
+                            Row(
+                              children: [
+                                const Icon(Icons.location_on,
+                                    color: Color(0xFF0047AB)),
+                                const SizedBox(width: 7),
+                                Text(
+                                  schedule.ruangKelas,
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: schedule.status == '1' ? Colors.grey : Colors.grey[600],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
                       ),
-                      const SizedBox(height: 7),
-                      Row(
-                        children: [
-                          const Icon(Icons.person, color: Color(0xFF0047AB)),
-                          const SizedBox(width: 7),
-                          Text(
-                            schedule.namaDosen,
-                            style: TextStyle(
-                              fontSize: 13,
-                              color: schedule.status == '1' ? Colors.black : Colors.grey[600],
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 7),
-                      Row(
-                        children: [
-                          const Icon(Icons.location_on,
-                              color: Color(0xFF0047AB)),
-                          const SizedBox(width: 7),
-                          Text(
-                            schedule.ruangKelas,
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: schedule.status == '1' ? Colors.grey : Colors.grey[600],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
+                    ),
+                  );
+                },
               ),
             ),
           );
