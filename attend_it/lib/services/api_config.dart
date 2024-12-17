@@ -1,3 +1,3 @@
 // api_config.dart
 // const String baseUrl = 'http://127.0.0.1:8000/api';
-const String baseUrl = 'http://192.168.0.105:4563/api';
+const String baseUrl = 'http://192.168.72.203:4563/api';

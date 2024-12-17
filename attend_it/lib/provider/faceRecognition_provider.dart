@@ -3,8 +3,11 @@ import '../services/face_recognition_service.dart';
 
 final faceRecognitionProvider = Provider<FaceRecognitionService>((ref) {
   final service = FaceRecognitionService();
-  service.loadModel(); // Pre-load the model
+  // Initialize the model asynchronously
+  service.loadModel().catchError((error) {
+    print('Failed to initialize face recognition: $error');
+  });
   return service;
 });
 
-  processImage(String path) {}
+processImage(String path) {}
