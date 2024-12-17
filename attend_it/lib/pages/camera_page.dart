@@ -55,14 +55,14 @@ class _CameraPageState extends ConsumerState<CameraPage> {
     final selectedSchedule =
         ref.watch(scheduleProvider.notifier).selectedSchedule;
 
-    final selectedSchedule =
-        ref.watch(scheduleProvider.notifier).selectedSchedule;
+    // final selectedSchedule =
+    //     ref.watch(scheduleProvider.notifier).selectedSchedule;
 
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: () => context.go('/presensi'),
+          onPressed: () => context.go('/home/presensi'),
         ),
         title: Text('Camera for ${selectedSchedule?.namaMatkul}'),
         backgroundColor: const Color(0xFF0047AB),

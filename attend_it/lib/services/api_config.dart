@@ -6,8 +6,8 @@ import 'dart:io';
 //     : 'http://127.0.0.1:8000/api';
 
 const String baseUrl =
-    'http://192.168.21.236:4563/api'; //sesuaikan dengan jaringan yang sama antara hp dan laptop -> ip4 address
-const String storageUrl = 'http://192.168.21.236:4563/storage';
+    'http://192.168.71.110:4563/api'; //sesuaikan dengan jaringan yang sama antara hp dan laptop -> ip4 address
+const String storageUrl = 'http://192.168.71.110:4563/storage';
 
 String getImageUrl(String? path) {
   if (path == null) return '';

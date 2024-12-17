@@ -111,7 +111,8 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                     decoration: InputDecoration(
                       hintText: 'Username',
                       hintStyle: TextStyle(color: Colors.grey.shade400),
-                      prefixIcon: const Icon(Icons.person_outline, color: Color(0xFF0047AB)),
+                      prefixIcon: const Icon(Icons.person_outline,
+                          color: Color(0xFF0047AB)),
                       border: InputBorder.none,
                       contentPadding: const EdgeInsets.all(20),
                     ),
@@ -138,7 +139,8 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                     decoration: InputDecoration(
                       hintText: 'Password',
                       hintStyle: TextStyle(color: Colors.grey.shade400),
-                      prefixIcon: const Icon(Icons.lock_outline, color: Color(0xFF0047AB)),
+                      prefixIcon: const Icon(Icons.lock_outline,
+                          color: Color(0xFF0047AB)),
                       suffixIcon: IconButton(
                         icon: Icon(
                           _isObscured ? Icons.visibility_off : Icons.visibility,
@@ -168,7 +170,8 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                     ),
                     child: _isLoading
                         ? const CircularProgressIndicator(
-                            valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                            valueColor:
+                                AlwaysStoppedAnimation<Color>(Colors.white),
                           )
                         : const Text(
                             'LOGIN',
@@ -195,10 +198,8 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                   ),
                 ),
               ],
-                ),
-              ),
-            );
-          },
+            ),
+          ),
         ),
       ),
     );
