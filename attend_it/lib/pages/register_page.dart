@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:attend_it/provider/auth_provider.dart';
+import 'dart:io';
+import 'package:image_picker/image_picker.dart';
 
 class RegisterPage extends ConsumerStatefulWidget {
   const RegisterPage({super.key});
@@ -49,6 +51,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
       {'id': '14', 'name': 'SIB-3E'}
     ],
   };
+  File? _selectedImage;
 
   void _togglePasswordView() {
     setState(() {
@@ -78,6 +81,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
           namaMahasiswa: _namaMahasiswaController.text,
           prodi: _prodiController.text,
           idKelas: _idKelasController.text,
+          foto: _selectedImage,
         );
         // Navigate to login page after successful registration
         if (mounted) {
@@ -99,6 +103,17 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
     }
   }
 
+  Future<void> _pickImage() async {
+    final ImagePicker picker = ImagePicker();
+    final XFile? image = await picker.pickImage(source: ImageSource.gallery);
+    
+    if (image != null) {
+      setState(() {
+        _selectedImage = File(image.path);
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -115,6 +130,32 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                   Image.asset(
                     'assets/images/logo_jti.jpg',
                     height: 150,
+                  ),
+                  const SizedBox(height: 20),
+                  GestureDetector(
+                    onTap: _pickImage,
+                    child: Container(
+                      width: 120,
+                      height: 120,
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFF3F4F6),
+                        borderRadius: BorderRadius.circular(60),
+                        border: Border.all(color: const Color(0xFF0047AB), width: 2),
+                      ),
+                      child: _selectedImage != null
+                          ? ClipRRect(
+                              borderRadius: BorderRadius.circular(60),
+                              child: Image.file(
+                                _selectedImage!,
+                                fit: BoxFit.cover,
+                              ),
+                            )
+                          : const Icon(
+                              Icons.add_a_photo,
+                              size: 40,
+                              color: Color(0xFF0047AB),
+                            ),
+                    ),
                   ),
                   const SizedBox(height: 20),
                   const Text(

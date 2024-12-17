@@ -76,7 +76,27 @@ class _HistoryPageState extends ConsumerState<HistoryPage> {
           ),
           Expanded(
             child: filteredPresensiList.isEmpty
-                ? const Center(child: CircularProgressIndicator())
+                ? const Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.history_outlined,
+                          size: 70,
+                          color: Color(0xFF0047AB),
+                        ),
+                        SizedBox(height: 16),
+                        Text(
+                          'Data Presensi Tidak Tersedia',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF0047AB),
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
                 : ListView.builder(
                     padding: const EdgeInsets.all(16.0),
                     itemCount: filteredPresensiList.length,

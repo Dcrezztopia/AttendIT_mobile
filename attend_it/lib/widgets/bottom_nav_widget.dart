@@ -20,22 +20,24 @@ class BottomNavBarWidget extends StatelessWidget {
       selectedItemColor: const Color(0xFF0C4DA2),
       unselectedItemColor: Colors.grey,
       onTap: (index) {
-        if (index == 0) {
-          context.go('/home'); // Navigasi ke halaman Home
+        onTap(index); // Update the currentIndex first
+        switch (index) {
+          case 0:
+            context.go('/home');
+            break;
+          case 1:
+            context.go('/home/presensi');
+            break;
+          case 2:
+            context.go('/home/histori');
+            break;
+          case 3:
+            context.go('/home/portal');
+            break;
+          case 4:
+            context.go('/home/profile');
+            break;
         }
-        if (index == 1) {
-          context.go('/presensi'); // Navigasi ke halaman Presensi
-        }
-        if (index == 2) {
-          context.go('/histori'); // Navigasi ke halaman Histori
-        }
-        if (index == 3) {
-          context.go('/portal'); // Navigasi ke halaman Schedule
-        }
-        if (index == 4) {
-          context.go('/profile'); // Navigasi ke halaman Profile
-        }
-        onTap(index); // Tetap panggil fungsi onTap eksternal
       },
       items: const [
         BottomNavigationBarItem(

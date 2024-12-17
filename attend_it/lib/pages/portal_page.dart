@@ -18,47 +18,72 @@ class PortalPageState extends ConsumerState<PortalPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const AppbarUserWidget(),
-      body: Column(
-        children: [
-          const FeatureWidget(
-            title: "Jadwal",
-            gradientColors: [
-              Color.fromARGB(255, 73, 89, 208),
-              Color.fromARGB(255, 255, 255, 255),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 10),
+              const Text(
+                "Portal",
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black87,
+                ),
+              ),
+              const SizedBox(height: 20),
+
+              // Grid layout untuk fitur-fitur
+              GridView.count(
+                physics: const NeverScrollableScrollPhysics(),
+                shrinkWrap: true,
+                crossAxisCount: 2,
+                crossAxisSpacing: 16,
+                mainAxisSpacing: 16,
+                children: const [
+                  FeatureWidget(
+                    title: "Siakad",
+                    gradientColors: [
+                      Color(0xFF9B29F1),
+                      Color.fromARGB(255, 196, 136, 239),
+                    ],
+                    url: "https://siakad.polinema.ac.id/login/",
+                    imagePath: 'assets/images/siakad.png',
+                  ),
+                  FeatureWidget(
+                    title: "LMS",
+                    gradientColors: [
+                      Color(0xFFFCCF31),
+                      Color(0xFFF55555),
+                    ],
+                    url: "https://lmsslc.polinema.ac.id/",
+                    imagePath: 'assets/images/jadwal2.png',
+                  ),
+                  FeatureWidget(
+                    title: "Website JTI",
+                    gradientColors: [
+                      Color(0xFFFF3F3B),
+                      Color(0xFFF97A7E),
+                    ],
+                    url: "https://jti.polinema.ac.id/",
+                    imagePath: 'assets/images/web.png',
+                  ),
+                  FeatureWidget(
+                    title: "Website Polinema",
+                    gradientColors: [
+                      Color(0xFF30A9FF),
+                      Color(0xFF6CD9FF),
+                    ],
+                    url: "https://www.polinema.ac.id/",
+                    imagePath: 'assets/images/lms.png',
+                  ),
+                ],
+              ),
             ],
-            imagePath: 'assets/images/jadwal2.png',
           ),
-          const FeatureWidget(
-            title: "Siakad",
-            gradientColors: [
-              Color(0XFFFFA4ED),
-              Color.fromARGB(255, 255, 255, 255),
-            ],
-            url: "https://siakad.polinema.ac.id/login/",
-            imagePath: 'assets/images/siakad.png',
-          ),
-          const FeatureWidget(
-            title: "LMS",
-            gradientColors: [
-              Color.fromARGB(255, 237, 172, 80),
-              Color.fromARGB(255, 255, 255, 255),
-            ],
-            url: "https://lmsslc.polinema.ac.id/",
-            imagePath: 'assets/images/lms.png',
-          ),
-          const FeatureWidget(
-            title: "Website JTI",
-            gradientColors: [
-              Color(0XFFFF3F3B),
-              Color.fromARGB(255, 255, 255, 255),
-            ],
-            url: "https://jti.polinema.ac.id/",
-            imagePath: 'assets/images/web.png',
-          ),
-          Expanded(
-            child: Container(), // Placeholder untuk mengisi ruang kosong
-          ),
-        ],
+        ),
       ),
       bottomNavigationBar: BottomNavBarWidget(
         currentIndex: _currentIndex,

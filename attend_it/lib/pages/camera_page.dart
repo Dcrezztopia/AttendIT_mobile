@@ -1,5 +1,6 @@
 import 'package:attend_it/pages/approving_page.dart';
 import 'package:attend_it/provider/schedule_provider.dart';
+import 'package:attend_it/provider/schedule_provider.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -51,6 +52,9 @@ class _CameraPageState extends ConsumerState<CameraPage> {
 
   @override
   Widget build(BuildContext context) {
+    final selectedSchedule =
+        ref.watch(scheduleProvider.notifier).selectedSchedule;
+
     final selectedSchedule =
         ref.watch(scheduleProvider.notifier).selectedSchedule;
 
