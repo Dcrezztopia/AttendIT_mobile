@@ -2,8 +2,11 @@ import 'dart:io';
 import 'package:attend_it/models/schedule.dart';
 import 'package:attend_it/widgets/bottom_nav_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:attend_it/provider/presensi_provider.dart';
+import 'package:go_router/go_router.dart';
 
-class ApprovingPage extends StatefulWidget {
+class ApprovingPage extends ConsumerStatefulWidget {
   final String imagePath;
   final Schedule selectedSchedule;
 
@@ -15,7 +18,7 @@ class ApprovingPage extends StatefulWidget {
   _ApprovingPageState createState() => _ApprovingPageState();
 }
 
-class _ApprovingPageState extends State<ApprovingPage> {
+class _ApprovingPageState extends ConsumerState<ApprovingPage> {
   int _currentIndex = 1; // Current index for the bottom navigation bar
 
   @override
@@ -134,14 +137,47 @@ class _ApprovingPageState extends State<ApprovingPage> {
                 ),
               ),
               const SizedBox(height: 20), // Add spacing
-              const Center(
-                child: CircleAvatar(
-                  radius: 40,
-                  backgroundColor: Colors.green,
-                  child: Icon(
-                    Icons.check,
-                    color: Colors.white,
-                    size: 40,
+              Center(
+                child: GestureDetector(
+                  onTap: () async {
+                    try {
+                      print('Button tapped - starting attendance submission');
+                      final now = DateTime.now();
+                      print('Current time: $now');
+                      
+                      await ref.read(presensiProvider.notifier).submitPresensi(
+                        idJadwal: widget.selectedSchedule.id,
+                        waktuMulai: widget.selectedSchedule.waktuMulai,
+                        captureTime: now,
+                      );
+                      print('Attendance submitted successfully');
+
+                      if (mounted) {
+                        // Show success message
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Presensi berhasil disimpan')),
+                        );
+                        // Navigate back to presensi page
+                        context.go('/home/presensi');
+                      }
+                    } catch (e) {
+                      print('Error submitting attendance: $e');
+                      // Show error message
+                      if (mounted) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('Gagal menyimpan presensi: $e')),
+                        );
+                      }
+                    }
+                  },
+                  child: const CircleAvatar(
+                    radius: 40,
+                    backgroundColor: Colors.green,
+                    child: Icon(
+                      Icons.check,
+                      color: Colors.white,
+                      size: 40,
+                    ),
                   ),
                 ),
               ),
