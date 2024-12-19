@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter/services.dart';
 import 'package:tflite_flutter/tflite_flutter.dart';
 import 'package:image/image.dart' as img;
 
@@ -6,26 +7,30 @@ class FaceRecognitionService {
   Interpreter? _interpreter;
   bool _isModelLoaded = false;
 
-  final Map<int, String> _labels = {
-    0: 'Unknown',
-    1: 'Mulki',
-    2: 'Dela',
-    3: 'Kinata',
-    4: 'Pascalis',
-  };
+  Map<int, String> _labels = {}; // Changed to empty map initially
 
   Future<void> loadModel() async {
     if (_isModelLoaded) return;
 
     try {
+      // Load model
       _interpreter = await Interpreter.fromAsset(
-        'assets/face_recognition_model_quantized.tflite',
+        'assets/models/face_recognition_model_quantized.tflite',
         options: InterpreterOptions()..threads = 4,
       );
+
+      // Load labels
+      final labelsData =
+          await rootBundle.loadString('assets/models/labels.txt');
+      final labelsList = labelsData.split('\n');
+      _labels = {
+        for (var i = 0; i < labelsList.length; i++) i: labelsList[i].trim()
+      };
+
       _isModelLoaded = true;
       print("Model loaded successfully");
     } catch (e) {
-      print("Error loading model: $e");
+      print("Error loading model or labels: $e");
       _isModelLoaded = false;
       rethrow;
     }
@@ -48,45 +53,58 @@ class FaceRecognitionService {
 
       if (image == null) throw Exception('Failed to load image');
 
-      // Resize image to 224x224
-      final processedImage = img.copyResize(image, width: 224, height: 224);
+      // Define input shape [batch, height, width, channels]
+      var inputShape = [1, 100, 100, 1];
 
-      // Create input buffer with exact size
-      var inputBuffer = List<int>.filled(1 * 224 * 224 * 3, 0);
+      // Create 4D input tensor array using inputShape
+      var inputArray = List<List<List<List<int>>>>.generate(
+        // Changed to int
+        inputShape[0],
+        (_) => List<List<List<int>>>.generate(
+          inputShape[1],
+          (_) => List<List<int>>.generate(
+            inputShape[2],
+            (_) => List<int>.filled(inputShape[3], 0),
+          ),
+        ),
+      );
 
-      // Fill buffer linearly
-      for (var y = 0; y < 224; y++) {
-        for (var x = 0; x < 224; x++) {
+      // Resize image to match input shape
+      final processedImage = img.copyResize(
+        image,
+        width: inputShape[2], // 100
+        height: inputShape[1], // 100
+      );
+
+      for (var y = 0; y < inputShape[1]; y++) {
+        for (var x = 0; x < inputShape[2]; x++) {
           final pixel = processedImage.getPixel(x, y);
-          final offset = (y * 224 + x) * 3;
-          inputBuffer[offset] =
-              ((pixel.r / 255.0) * 255 - 128).round().clamp(-128, 127);
-          inputBuffer[offset + 1] =
-              ((pixel.g / 255.0) * 255 - 128).round().clamp(-128, 127);
-          inputBuffer[offset + 2] =
-              ((pixel.b / 255.0) * 255 - 128).round().clamp(-128, 127);
+          // Convert RGB to grayscale using luminance formula
+          final grayscale =
+              (0.299 * pixel.r + 0.587 * pixel.g + 0.114 * pixel.b);
+          // Convert to int8 range (-128 to 127)
+          inputArray[0][y][x][0] =
+              ((grayscale / 255.0) * 255 - 128).round().clamp(-128, 127);
         }
       }
 
-      // Create output buffer with exact size
-      final outputShape = _interpreter!.getOutputTensor(0).shape;
-      final outputSize = outputShape.reduce((a, b) => a * b);
-      final outputBuffer = List<int>.filled(outputSize, 0);
-
-      // Allocate tensors
-      _interpreter!.allocateTensors();
+      // Create output array matching the model's output shape [1, 10]
+      var outputArray = List<List<int>>.generate(
+        1,
+        (_) => List<int>.filled(10, 0),
+      );
 
       // Run inference
-      _interpreter!.run(inputBuffer, outputBuffer);
+      _interpreter!.run(inputArray, outputArray);
 
-      // Process results
+      // Process results - now handling 2D output array
       int maxIndex = 0;
-      int maxValue = outputBuffer[0];
+      int maxValue = outputArray[0][0];
 
-      for (var i = 1; i < outputBuffer.length; i++) {
-        if (outputBuffer[i] > maxValue) {
+      for (var i = 0; i < outputArray[0].length; i++) {
+        if (outputArray[0][i] > maxValue) {
           maxIndex = i;
-          maxValue = outputBuffer[i];
+          maxValue = outputArray[0][i];
         }
       }
 
@@ -100,7 +118,7 @@ class FaceRecognitionService {
     } catch (e) {
       print('Error in face recognition: $e');
       return {
-        'predicted_name': 'Error',
+        'predicted_name': 'Unknown',
         'confidence': 0.0,
       };
     }

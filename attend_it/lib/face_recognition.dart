@@ -1,12 +1,13 @@
 import 'dart:typed_data';
+import 'package:attend_it/services/face_recognition_service.dart';
 import 'package:flutter/material.dart';
 import 'package:tflite_flutter/tflite_flutter.dart';
 import 'package:camera/camera.dart';
 import 'models/schedule.dart';
 
 class FaceRecognitionPage extends StatefulWidget {
-  final Schedule schedule;  // Add schedule parameter
-  
+  final Schedule schedule; // Add schedule parameter
+
   const FaceRecognitionPage({
     Key? key,
     required this.schedule,
@@ -20,61 +21,130 @@ class _FaceRecognitionPageState extends State<FaceRecognitionPage> {
   late CameraController _cameraController;
   late Interpreter _interpreter;
   late List<CameraDescription> cameras;
+  final FaceRecognitionService _faceService = FaceRecognitionService();
+  bool _isProcessing = false;
   late CameraImage _cameraImage;
 
   @override
   void initState() {
     super.initState();
-    loadModel();
-    initializeCamera();
+    _initializeCamera();
   }
 
-  void loadModel() async {
-    _interpreter = await Interpreter.fromAsset('face_recognition_model.tflite');
-    print("Model loaded successfully");
+  Future<void> _initializeCamera() async {
+    try {
+      cameras = await availableCameras();
+      _cameraController = CameraController(
+        cameras[1], // Use front camera (index 1)
+        ResolutionPreset.medium,
+        enableAudio: false,
+      );
+      await _cameraController.initialize();
+      await _faceService.loadModel(); // Initialize face recognition model
+      setState(() {});
+    } catch (e) {
+      print('Error initializing camera: $e');
+    }
   }
 
-  void initializeCamera() async {
-    cameras = await availableCameras();
-    _cameraController = CameraController(cameras[0], ResolutionPreset.medium);
-    await _cameraController.initialize();
-    _cameraController.startImageStream((CameraImage image) {
-      setState(() {
-        _cameraImage = image;
-      });
+  Future<void> _processImage() async {
+    if (_isProcessing) return;
+
+    setState(() {
+      _isProcessing = true;
     });
+
+    try {
+      final image = await _cameraController.takePicture();
+
+      // Process image using face recognition service
+      final result = await _faceService.processImage(image.path);
+
+      // Handle recognition result
+      if (result['confidence'] > 0.7) {
+        // Adjust threshold as needed
+        await submitAttendance(widget.schedule.id.toString());
+        _showSuccessDialog(result['predicted_name']);
+      } else {
+        _showErrorDialog('Face not recognized or confidence too low');
+      }
+    } catch (e) {
+      print('Error processing image: $e');
+      _showErrorDialog('Error processing image');
+    } finally {
+      setState(() {
+        _isProcessing = false;
+      });
+    }
+  }
+
+  void _showSuccessDialog(String name) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Success'),
+        content: Text('Attendance recorded for $name'),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              Navigator.of(context).pop(); // Return to PresensiPage
+            },
+            child: const Text('OK'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showErrorDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Error'),
+        content: Text(message),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('OK'),
+          ),
+        ],
+      ),
+    );
   }
 
   // Running inference
-  void runModel(Uint8List input) {
-    // Get input and output tensors info
-    final inputShape = _interpreter.getInputTensor(0).shape;
-    final outputShape = _interpreter.getOutputTensor(0).shape;
-    
-    // Create input tensor
-    final inputByteData = input.buffer.asByteData();
-    final inputTensor = _allocateTensorBuffer(inputShape).asByteData();
-    for (var i = 0; i < input.length; i++) {
-      inputTensor.setUint8(i, inputByteData.getUint8(i));
-    }
+  // void runModel(Uint8List input) {
+  //   // Get input and output tensors info
+  //   final inputShape = _interpreter.getInputTensor(0).shape;
+  //   final outputShape = _interpreter.getOutputTensor(0).shape;
 
-    // Prepare output tensor
-    final outputTensor = ByteData(_allocateTensorBuffer(outputShape).lengthInBytes);
-    
-    // Run inference
-    _interpreter.run(inputTensor, outputTensor);
+  //   // Create input tensor
+  //   final inputByteData = input.buffer.asByteData();
+  //   final inputTensor = _allocateTensorBuffer(inputShape).asByteData();
+  //   for (var i = 0; i < input.length; i++) {
+  //     inputTensor.setUint8(i, inputByteData.getUint8(i));
+  //   }
 
-    // Convert output to list of doubles
-    final outputList = List<double>.filled(outputShape.reduce((a, b) => a * b), 0);
-    final outputByteData = outputTensor;
-    
-    for (var i = 0; i < outputList.length; i++) {
-      outputList[i] = outputByteData.getFloat32(i * 4, Endian.little);
-    }
+  //   // Prepare output tensor
+  //   final outputTensor =
+  //       ByteData(_allocateTensorBuffer(outputShape).lengthInBytes);
 
-    print("Inference result: $outputList");
-    postProcessOutput(outputList);
-  }
+  //   // Run inference
+  //   _interpreter.run(inputTensor, outputTensor);
+
+  //   // Convert output to list of doubles
+  //   final outputList =
+  //       List<double>.filled(outputShape.reduce((a, b) => a * b), 0);
+  //   final outputByteData = outputTensor;
+
+  //   for (var i = 0; i < outputList.length; i++) {
+  //     outputList[i] = outputByteData.getFloat32(i * 4, Endian.little);
+  //   }
+
+  //   print("Inference result: $outputList");
+  //   postProcessOutput(outputList);
+  // }
 
   ByteBuffer _allocateTensorBuffer(List<int> shape) {
     final size = shape.reduce((a, b) => a * b);
@@ -90,6 +160,14 @@ class _FaceRecognitionPageState extends State<FaceRecognitionPage> {
 
   @override
   Widget build(BuildContext context) {
+    if (!_cameraController.value.isInitialized) {
+      return const Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Face Recognition - ${widget.schedule.namaMatkul}'),
@@ -104,14 +182,13 @@ class _FaceRecognitionPageState extends State<FaceRecognitionPage> {
             child: Column(
               children: [
                 Text('Course: ${widget.schedule.namaMatkul}'),
-                Text('Time: ${widget.schedule.waktuMulai} - ${widget.schedule.waktuSelesai}'),
+                Text(
+                    'Time: ${widget.schedule.waktuMulai} - ${widget.schedule.waktuSelesai}'),
                 ElevatedButton(
-                  onPressed: () async {
-                    final image = await _cameraController.takePicture();
-                    final bytes = await image.readAsBytes();
-                    runModel(bytes);
-                  },
-                  child: const Text('Take Attendance'),
+                  onPressed: _isProcessing ? null : _processImage,
+                  child: _isProcessing
+                      ? const CircularProgressIndicator()
+                      : const Text('Take Attendance'),
                 ),
               ],
             ),
@@ -122,37 +199,37 @@ class _FaceRecognitionPageState extends State<FaceRecognitionPage> {
   }
 
   // Modify postProcessOutput to handle attendance submission
-  void postProcessOutput(List<double> outputList) {
-    // Add your face recognition logic here
-    if (isValidFace(outputList)) {
-      // Submit attendance
-      submitAttendance(widget.schedule.id.toString());
-      
-      // Show success dialog
-      showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: const Text('Success'),
-          content: const Text('Attendance recorded successfully'),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-                Navigator.of(context).pop(); // Return to PresensiPage
-              },
-              child: const Text('OK'),
-            ),
-          ],
-        ),
-      );
-    }
-  }
+  // void postProcessOutput(List<double> outputList) {
+  //   // Add your face recognition logic here
+  //   if (isValidFace(outputList)) {
+  //     // Submit attendance
+  //     submitAttendance(widget.schedule.id.toString());
 
-  bool isValidFace(List<double> output) {
-    // Implement your face validation logic
-    // Return true if face is recognized
-    return true; // Placeholder
-  }
+  //     // Show success dialog
+  //     showDialog(
+  //       context: context,
+  //       builder: (context) => AlertDialog(
+  //         title: const Text('Success'),
+  //         content: const Text('Attendance recorded successfully'),
+  //         actions: [
+  //           TextButton(
+  //             onPressed: () {
+  //               Navigator.of(context).pop();
+  //               Navigator.of(context).pop(); // Return to PresensiPage
+  //             },
+  //             child: const Text('OK'),
+  //           ),
+  //         ],
+  //       ),
+  //     );
+  //   }
+  // }
+
+  // bool isValidFace(List<double> output) {
+  //   // Implement your face validation logic
+  //   // Return true if face is recognized
+  //   return true; // Placeholder
+  // }
 
   Future<void> submitAttendance(String scheduleId) async {
     // Implement attendance submission to backend
@@ -162,6 +239,7 @@ class _FaceRecognitionPageState extends State<FaceRecognitionPage> {
   void dispose() {
     super.dispose();
     _cameraController.dispose();
+    _faceService.dispose();
     _interpreter.close();
   }
 }

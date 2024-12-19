@@ -80,7 +80,7 @@ flutter:
   # the material Icons class.
   uses-material-design: true
   assets:
-    - assets/face_recognition_model_quantized.tflite
+    - assets/models/
     - assets/images/logo_jti.jpg
     - assets/images/presensiHome.png
     - assets/images/jadwal.png
