@@ -1,132 +1,72 @@
 import 'dart:io';
-import 'package:flutter/services.dart';
-import 'package:tflite_flutter/tflite_flutter.dart';
-import 'package:image/image.dart' as img;
+// import 'package:flutter/services.dart';
+import 'package:http/http.dart' as http;
+import 'package:http_parser/http_parser.dart';
+import 'dart:convert';
+import 'package:mime/mime.dart';
 
 class FaceRecognitionService {
-  Interpreter? _interpreter;
-  bool _isModelLoaded = false;
-
-  Map<int, String> _labels = {}; // Changed to empty map initially
-
-  Future<void> loadModel() async {
-    if (_isModelLoaded) return;
-
-    try {
-      // Load model
-      _interpreter = await Interpreter.fromAsset(
-        'assets/models/face_recognition_model_quantized.tflite',
-        options: InterpreterOptions()..threads = 4,
-      );
-
-      // Load labels
-      final labelsData =
-          await rootBundle.loadString('assets/models/labels.txt');
-      final labelsList = labelsData.split('\n');
-      _labels = {
-        for (var i = 0; i < labelsList.length; i++) i: labelsList[i].trim()
-      };
-
-      _isModelLoaded = true;
-      print("Model loaded successfully");
-    } catch (e) {
-      print("Error loading model or labels: $e");
-      _isModelLoaded = false;
-      rethrow;
-    }
-  }
+  final String baseUrl =
+      'http://192.168.0.109:8000'; // FastAPI server URL for Android emulator
 
   Future<Map<String, dynamic>> processImage(String imagePath) async {
     try {
-      if (!_isModelLoaded) {
-        await loadModel();
-      }
+      final url = Uri.parse('$baseUrl/recognize');
+      print('Sending request to: $url');
 
-      if (_interpreter == null) {
-        throw Exception('Model not loaded');
-      }
-
-      // Load and preprocess the image
+      // Debug: Print image info
       final imageFile = File(imagePath);
-      final imageBytes = await imageFile.readAsBytes();
-      final image = img.decodeImage(imageBytes);
+      print('Image exists: ${await imageFile.exists()}');
+      print('Image size: ${await imageFile.length()} bytes');
 
-      if (image == null) throw Exception('Failed to load image');
+      final mimeType = lookupMimeType(imagePath);
+      print('MIME type: $mimeType');
 
-      // Define input shape [batch, height, width, channels]
-      var inputShape = [1, 100, 100, 1];
+      final request = http.MultipartRequest('POST', url)
+        ..files.add(await http.MultipartFile.fromPath(
+          'file',
+          imagePath,
+          contentType: MediaType.parse(mimeType ?? 'image/jpeg'),
+        ));
 
-      // Create 4D input tensor array using inputShape
-      var inputArray = List<List<List<List<int>>>>.generate(
-        // Changed to int
-        inputShape[0],
-        (_) => List<List<List<int>>>.generate(
-          inputShape[1],
-          (_) => List<List<int>>.generate(
-            inputShape[2],
-            (_) => List<int>.filled(inputShape[3], 0),
-          ),
-        ),
-      );
+      final response = await request.send();
+      final responseBody = await response.stream.bytesToString();
+      print('Response body: $responseBody');
 
-      // Resize image to match input shape
-      final processedImage = img.copyResize(
-        image,
-        width: inputShape[2], // 100
-        height: inputShape[1], // 100
-      );
-
-      for (var y = 0; y < inputShape[1]; y++) {
-        for (var x = 0; x < inputShape[2]; x++) {
-          final pixel = processedImage.getPixel(x, y);
-          // Convert RGB to grayscale using luminance formula
-          final grayscale =
-              (0.299 * pixel.r + 0.587 * pixel.g + 0.114 * pixel.b);
-          // Convert to int8 range (-128 to 127)
-          inputArray[0][y][x][0] =
-              ((grayscale / 255.0) * 255 - 128).round().clamp(-128, 127);
+      if (response.statusCode == 200) {
+        final result = json.decode(responseBody);
+        if (result['results'] != null && result['results'].isNotEmpty) {
+          final firstResult = result['results'][0];
+          return {
+            'predicted_name': firstResult['predicted_name'] ?? 'Unknown',
+            'confidence': firstResult['confidence'] ?? 0.0,
+          };
+        } else if (result['error'] != null) {
+          print('Server error: ${result['error']}');
+          return {
+            'predicted_name': 'Error: ${result['error']}',
+            'confidence': 0.0,
+          };
+        } else {
+          print('No faces detected in the image');
+          return {
+            'predicted_name': 'No face detected',
+            'confidence': 0.0,
+          };
         }
+      } else {
+        throw Exception('Failed to process image: ${response.statusCode}');
       }
-
-      // Create output array matching the model's output shape [1, 10]
-      var outputArray = List<List<int>>.generate(
-        1,
-        (_) => List<int>.filled(10, 0),
-      );
-
-      // Run inference
-      _interpreter!.run(inputArray, outputArray);
-
-      // Process results - now handling 2D output array
-      int maxIndex = 0;
-      int maxValue = outputArray[0][0];
-
-      for (var i = 0; i < outputArray[0].length; i++) {
-        if (outputArray[0][i] > maxValue) {
-          maxIndex = i;
-          maxValue = outputArray[0][i];
-        }
-      }
-
-      // Convert the int8 output to confidence score (0-1 range)
-      double confidence = (maxValue + 128) / 255.0;
-
-      return {
-        'predicted_name': _labels[maxIndex] ?? 'Unknown',
-        'confidence': confidence,
-      };
     } catch (e) {
       print('Error in face recognition: $e');
       return {
-        'predicted_name': 'Unknown',
+        'predicted_name': 'Error',
         'confidence': 0.0,
       };
     }
   }
 
   void dispose() {
-    _interpreter?.close();
-    _interpreter = null;
-    _isModelLoaded = false;
+    // Clean up if needed
   }
 }
