@@ -1,3 +1,5 @@
+import 'package:attend_it/models/schedule.dart';
+import 'package:attend_it/pages/approving_page.dart';
 import 'package:attend_it/pages/camera_page.dart';
 import 'package:attend_it/pages/history_page.dart';
 import 'package:attend_it/pages/home_page.dart';
@@ -35,6 +37,17 @@ final router = GoRouter(
                 GoRoute(
                   path: 'camera',
                   builder: (context, state) => const CameraPage(),
+                ),
+                GoRoute(
+                  path: 'approving',
+                  builder: (context, state) {
+                    final extra = state.extra as Map<String, dynamic>;
+                    return ApprovingPage(
+                      imagePath: extra['imagePath'] as String,
+                      selectedSchedule: extra['selectedSchedule'] as Schedule,
+                      captureTime: extra['captureTime'] as DateTime,
+                    );
+                  },
                 ),
               ],
             ),

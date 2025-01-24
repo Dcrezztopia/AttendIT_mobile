@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously, file_names
+
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
@@ -54,7 +56,7 @@ class ImageUploadService {
         throw Exception("Failed to upload image: ${response.statusCode}, $responseBody");
       }
     } catch (e) {
-      print("Error uploading image: $e");
+      // print("Error uploading image: $e");
       
       // Tampilkan error atau snackbar
       ScaffoldMessenger.of(context).showSnackBar(

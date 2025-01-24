@@ -36,7 +36,7 @@ class StatisticsNotifier extends StateNotifier<Map<String, int>> {
         throw Exception('Failed to load statistics');
       }
     } catch (e) {
-      print('Error fetching statistics: $e');
+      // print('Error fetching statistics: $e');
     }
   }
 }

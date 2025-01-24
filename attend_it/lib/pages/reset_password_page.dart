@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:attend_it/services/api_config.dart';
 import 'package:attend_it/services/secure_storage_service.dart';
 import 'package:flutter/material.dart';
@@ -6,13 +8,13 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class ResetPasswordPage extends ConsumerStatefulWidget {
-  const ResetPasswordPage({Key? key}) : super(key: key);
+  const ResetPasswordPage({super.key});
 
   @override
-  _ResetPasswordPageState createState() => _ResetPasswordPageState();
+  ResetPasswordPageState createState() => ResetPasswordPageState();
 }
 
-class _ResetPasswordPageState extends ConsumerState<ResetPasswordPage> {
+class ResetPasswordPageState extends ConsumerState<ResetPasswordPage> {
   final _formKey = GlobalKey<FormState>();
   final _currentPasswordController = TextEditingController();
   final _newPasswordController = TextEditingController();
@@ -46,7 +48,7 @@ class _ResetPasswordPageState extends ConsumerState<ResetPasswordPage> {
           );
         }
       } catch (e) {
-        print('Error resetting password: $e');
+        // print('Error resetting password: $e');
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('An error occurred')),
         );

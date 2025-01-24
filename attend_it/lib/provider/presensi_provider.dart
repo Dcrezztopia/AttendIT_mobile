@@ -40,7 +40,7 @@ class PresensiNotifier extends StateNotifier<List<Presensi>> {
         throw Exception('Failed to load presensi');
       }
     } catch (e) {
-      print('Error fetching presensi: $e');
+      // print('Error fetching presensi: $e');
     }
   }
 
@@ -50,8 +50,9 @@ class PresensiNotifier extends StateNotifier<List<Presensi>> {
     required DateTime captureTime,
   }) async {
     try {
-      final tanggalPresensi = "${captureTime.year}-${captureTime.month.toString().padLeft(2, '0')}-${captureTime.day.toString().padLeft(2, '0')}";
-      
+      final tanggalPresensi =
+          "${captureTime.year}-${captureTime.month.toString().padLeft(2, '0')}-${captureTime.day.toString().padLeft(2, '0')}";
+
       final pertemuanKe = PertemuanHelper.getPertemuanKe(tanggalPresensi);
       if (pertemuanKe == 0) {
         throw Exception('Tidak ada jadwal pertemuan hari ini');
@@ -61,13 +62,12 @@ class PresensiNotifier extends StateNotifier<List<Presensi>> {
         hour: int.parse(waktuMulai.split(':')[0]),
         minute: int.parse(waktuMulai.split(':')[1]),
       );
-      
-      final presensiTime = TimeOfDay(
-        hour: captureTime.hour,
-        minute: captureTime.minute
-      );
-      
-      final statusPresensi = isOnTime(presensiTime, jadwalMulai) ? 'hadir' : 'alpha';
+
+      final presensiTime =
+          TimeOfDay(hour: captureTime.hour, minute: captureTime.minute);
+
+      final statusPresensi =
+          isOnTime(presensiTime, jadwalMulai) ? 'hadir' : 'alpha';
 
       final token = await _storage.readToken();
       if (token == null) throw Exception('Token tidak tersedia');
@@ -77,6 +77,7 @@ class PresensiNotifier extends StateNotifier<List<Presensi>> {
         headers: {
           'Authorization': 'Bearer $token',
           'Content-Type': 'application/json',
+          'Accept': 'application/json',
         },
         body: jsonEncode({
           'id_jadwal': idJadwal,
@@ -87,19 +88,30 @@ class PresensiNotifier extends StateNotifier<List<Presensi>> {
         }),
       );
 
-      if (response.statusCode != 201) {
+      if (response.statusCode == 422) {
         final errorData = jsonDecode(response.body);
-        throw Exception(errorData['message'] ?? 'Gagal melakukan presensi');
+        throw Exception(errorData['message']);
       }
 
-      await fetchPresensi(); // Refresh daftar presensi
+      if (response.statusCode != 201) {
+        if (response.headers['content-type']?.contains('application/json') ??
+            false) {
+          final errorData = jsonDecode(response.body);
+          throw Exception(errorData['message'] ?? 'Gagal melakukan presensi');
+        } else {
+          throw Exception('Terjadi kesalahan pada server');
+        }
+      }
+
+      await fetchPresensi();
     } catch (e) {
       rethrow;
     }
   }
+
   bool isOnTime(TimeOfDay presensi, TimeOfDay jadwal) {
     final presensiMinutes = presensi.hour * 60 + presensi.minute;
     final jadwalMinutes = jadwal.hour * 60 + jadwal.minute;
-    return (presensiMinutes - jadwalMinutes) <= 1;
+    return (presensiMinutes - jadwalMinutes) <= 2;
   }
 }

@@ -35,12 +35,12 @@ class ScheduleNotifier extends StateNotifier<List<Schedule>> {
           // print('Data jadwal: $data');
           state = jadwals.map((json) => Schedule.fromJson(json)).toList();
         } else {
-          print('Key "jadwals" tidak ditemukan dalam respons.');
+          // print('Key "jadwals" tidak ditemukan dalam respons.');
           state = [];
         }
       } else {
-        print('Failed to fetch schedules. Status: ${response.statusCode}');
-        print('Respon API: ${response.body}');
+        // print('Failed to fetch schedules. Status: ${response.statusCode}');
+        // print('Respon API: ${response.body}');
         throw Exception('Failed to fetch schedules');
       }
     } catch (e) {

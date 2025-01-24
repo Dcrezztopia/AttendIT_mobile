@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:attend_it/provider/schedule_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -18,18 +20,9 @@ class _PresensiPageState extends ConsumerState<PresensiPage> {
   @override
   void initState() {
     super.initState();
-    // _sortSchedules(); // Sort schedules when the page is loaded
     // Panggil fetchSchedules untuk mengambil data
     Future.microtask(() => ref.read(scheduleProvider.notifier).fetchSchedules());
   }
-
-  // Function to sort schedules with active ones at the top
-  // void _sortSchedules() {
-  //   schedules.sort((a, b) {
-  //     // Compare based on the 'isActive' boolean value, converting them to integers (1 for true, 0 for false)
-  //     return (b['isActive'] ? 1 : 0).compareTo(a['isActive'] ? 1 : 0);
-  //   });
-  // }
 
   @override
   Widget build(BuildContext context) {

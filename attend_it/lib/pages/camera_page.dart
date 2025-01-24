@@ -1,9 +1,9 @@
-import 'package:attend_it/pages/approving_page.dart';
+// ignore_for_file: library_private_types_in_public_api, use_build_context_synchronously
+
 import 'package:attend_it/provider/schedule_provider.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'dart:io';
 import 'package:attend_it/widgets/identity_confirmation_dialog.dart';
 import 'package:go_router/go_router.dart';
 import 'package:attend_it/provider/faceRecognition_provider.dart';
@@ -53,9 +53,6 @@ class _CameraPageState extends ConsumerState<CameraPage> {
   Widget build(BuildContext context) {
     final selectedSchedule =
         ref.watch(scheduleProvider.notifier).selectedSchedule;
-
-    // final selectedSchedule =
-    //     ref.watch(scheduleProvider.notifier).selectedSchedule;
 
     return Scaffold(
       appBar: AppBar(
@@ -109,28 +106,21 @@ class _CameraPageState extends ConsumerState<CameraPage> {
                           return IdentityConfirmationDialog(
                             predictedName: result['predicted_name'],
                             confidence: result['confidence'],
-                            onConfirm: () {
-                              Navigator.of(context).pop();
-                              if (selectedSchedule != null) {
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (context) => ApprovingPage(
-                                      imagePath: image.path,
-                                      selectedSchedule: selectedSchedule,
-                                    ),
-                                  ),
-                                );
-                              }
-                            },
+                            captureTime: DateTime.now(),
+                            idJadwal: selectedSchedule!.id,
+                            waktuMulai: selectedSchedule.waktuMulai,
+                            imagePath: image.path,
+                            selectedSchedule: selectedSchedule,
                             onRetake: () {
                               Navigator.of(context).pop();
                             },
+                            onConfirm: () {},
                           );
                         },
                       );
                     }
                   } catch (e) {
-                    print('Error capturing picture: $e');
+                    // print('Error capturing picture: $e');
                   } finally {
                     setState(() => _isTakingPicture = false);
                   }

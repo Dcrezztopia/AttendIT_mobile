@@ -1,18 +1,32 @@
+import 'package:attend_it/models/schedule.dart';
+import 'package:attend_it/provider/presensi_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 class IdentityConfirmationDialog extends StatelessWidget {
   final Function() onConfirm;
   final Function() onRetake;
   final String? predictedName;
   final double? confidence;
+  final DateTime captureTime;
+  final int idJadwal;
+  final String waktuMulai;
+  final String imagePath;
+  final Schedule selectedSchedule;
 
   const IdentityConfirmationDialog({
-    Key? key,
+    super.key,
     required this.onConfirm,
     required this.onRetake,
+    required this.captureTime,
+    required this.idJadwal,
+    required this.waktuMulai,
+    required this.imagePath,
+    required this.selectedSchedule,
     this.predictedName,
     this.confidence,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -71,14 +85,42 @@ class IdentityConfirmationDialog extends StatelessWidget {
                   onPressed: onRetake,
                   child: const Text('Ambil Ulang'),
                 ),
-                ElevatedButton(
-                  onPressed: onConfirm,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF0047AB),
-                    foregroundColor: Colors.white,
-                  ),
-                  child: const Text('Konfirmasi'),
-                ),
+                Consumer(builder: (context, ref, child) {
+                  return ElevatedButton(
+                    onPressed: () async {
+                      try {
+                        await ref
+                            .read(presensiProvider.notifier)
+                            .submitPresensi(
+                              idJadwal: idJadwal,
+                              waktuMulai: waktuMulai,
+                              captureTime: captureTime,
+                            );
+
+                        if (context.mounted) {
+                          Navigator.of(context).pop();
+                          context.go('/home/presensi/approving', extra: {
+                            'imagePath': imagePath,
+                            'selectedSchedule': selectedSchedule,
+                            'captureTime': captureTime,
+                          });
+                        }
+                      } catch (e) {
+                        if (context.mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                                content: Text('Gagal menyimpan presensi: $e')),
+                          );
+                        }
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF0047AB),
+                      foregroundColor: Colors.white,
+                    ),
+                    child: const Text('Konfirmasi'),
+                  );
+                }),
               ],
             ),
           ],

@@ -1,4 +1,6 @@
 // pages/home_page.dart
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:attend_it/provider/auth_provider.dart';
 import 'package:attend_it/widgets/bottom_nav_widget.dart';
 import 'package:flutter/material.dart';

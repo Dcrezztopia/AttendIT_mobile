@@ -7,8 +7,6 @@ import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 import 'package:mime/mime.dart';
 
-// import 'package:shared_preferences/shared_preferences.dart';
-
 /// Provider for managing authentication state.
 final authProvider = StateNotifierProvider<AuthNotifier, AuthState>((ref) {
   return AuthNotifier();
@@ -121,12 +119,12 @@ class AuthNotifier extends StateNotifier<AuthState> {
     try {
       final token = await _storageService.readToken();
       if (token == null || token.isEmpty) {
-        print('Token not found');
+        // print('Token not found');
         state = state.copyWith(isLoading: false);
         return;
       }
 
-      print('Token found: $token');
+      // print('Token found: $token');
 
       // Verify token validity
       final response = await http.get(
@@ -142,7 +140,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
         // Token is invalid, clear it
         await _storageService.deleteToken();
         state = AuthState.initial();
-        print('Token is invalid, user needs to log in again');
+        // print('Token is invalid, user needs to log in again');
       }
     } catch (e) {
       state = AuthState.initial();

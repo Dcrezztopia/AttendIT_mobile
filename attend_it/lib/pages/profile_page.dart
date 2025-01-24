@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:attend_it/provider/auth_provider.dart';
 import 'package:attend_it/provider/statistics_provider.dart';
 import 'package:attend_it/widgets/bottom_nav_widget.dart';
@@ -19,7 +21,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
   void _logout() async {
     final authNotifier = ref.read(authProvider.notifier);
     await authNotifier.logout();
-    print('User has logged out successfully');
+    // print('User has logged out successfully');
     // ignore: use_build_context_synchronously
     context.go('/login');
   }
